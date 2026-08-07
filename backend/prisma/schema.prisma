@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String?
+  password  String
+  avatar    String?
+  role      String     @default("user")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  projects    Project[]
+  generations Generation[]
+
+  @@map("users")
+}
+
+model Project {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  generations Generation[]
+
+  @@map("projects")
+}
+
+model Generation {
+  id            String   @id @default(cuid())
+  type          String   // image, video, 3d, audio
+  prompt        String
+  status        String   @default("pending") // pending, processing, completed, failed
+  outputUrl     String?
+  metadata      Json?
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("generations")
+}
