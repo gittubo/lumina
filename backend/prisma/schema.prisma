@@ -24,6 +24,7 @@ model User {
   generations Generation[]
 
   @@map("users")
+  @@index([email])
 }
 
 model Project {
@@ -38,6 +39,7 @@ model Project {
   generations Generation[]
 
   @@map("projects")
+  @@index([userId])
 }
 
 model Generation {
@@ -47,12 +49,16 @@ model Generation {
   status        String   @default("pending") // pending, processing, completed, failed
   outputUrl     String?
   metadata      Json?
+  error         String?
   projectId     String
   project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   userId        String
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   @@map("generations")
+  @@index([userId])
+  @@index([projectId])
+  @@index([status])
 }
