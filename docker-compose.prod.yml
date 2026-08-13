@@ -1,0 +1,102 @@
+version: '3.9'
+
+# Production deployment: builds the real production images (Dockerfiles'
+# multi-stage builds, `npm start` / standalone `node server.js`) rather
+# than bind-mounting source and running dev servers like docker-compose.yml
+# does. Reads secrets from a `.env` file in this directory — see
+# `.env.example` for the required variables. Run with:
+#   docker compose -f docker-compose.prod.yml up --build
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: lumina-postgres-prod
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lumina_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+      POSTGRES_DB: ${POSTGRES_DB:-lumina_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lumina_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lumina-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: lumina-redis-prod
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lumina-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lumina-backend-prod
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lumina_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-lumina_db}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+      JWT_EXPIRY: ${JWT_EXPIRY:-7d}
+      PORT: 5000
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      STABILITY_AI_API_KEY: ${STABILITY_AI_API_KEY:-}
+      STABILITY_AI_BASE_URL: ${STABILITY_AI_BASE_URL:-https://api.stability.ai}
+      RUNWAY_API_KEY: ${RUNWAY_API_KEY:-}
+      RUNWAY_BASE_URL: ${RUNWAY_BASE_URL:-https://api.dev.runwayml.com}
+      MESHY_API_KEY: ${MESHY_API_KEY:-}
+      MESHY_BASE_URL: ${MESHY_BASE_URL:-https://api.meshy.ai}
+      ELEVEN_LABS_API_KEY: ${ELEVEN_LABS_API_KEY:-}
+      ELEVEN_LABS_BASE_URL: ${ELEVEN_LABS_BASE_URL:-https://api.elevenlabs.io}
+      HOURLY_GENERATION_RATE_LIMIT: ${HOURLY_GENERATION_RATE_LIMIT:-30}
+      DAILY_GENERATION_LIMIT: ${DAILY_GENERATION_LIMIT:-50}
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - lumina-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:5000}
+    container_name: lumina-frontend-prod
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - lumina-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  lumina-network:
+    driver: bridge
