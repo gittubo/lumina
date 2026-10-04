@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Night Out — A cocktail house after dark</title>
+  <meta name="description" content="Night Out is a cocktail house for the hours after dark: signature cocktails, a 180-bottle back bar, a fire-and-smoke kitchen and late sets until 3AM.">
+  <meta name="theme-color" content="#0a0807">
+  <meta property="og:title" content="Night Out — A cocktail house after dark">
+  <meta property="og:description" content="Signature cocktails, a 180-bottle back bar and a fire-and-smoke kitchen. Open until 3AM.">
+  <meta property="og:image" content="assets/video/library.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0807'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='34' fill='%23d6a656'%3ENo%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/cormorant-garamond-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/cormorant-garamond-latin-300-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/seq/hero/001.webp" as="image">
+  <link rel="stylesheet" href="vendor/lenis.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="is-loading">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ============ LOADER / THRESHOLD ============ -->
+  <div class="loader" aria-live="polite">
+    <div class="loader__inner">
+      <p class="loader__eyebrow mono">Est. after dark</p>
+      <div class="loader__mark" aria-hidden="true">
+        <span>N</span><span>i</span><span>g</span><span>h</span><span>t</span><span class="sp"></span><em>O</em><em>u</em><em>t</em>
+      </div>
+      <div class="loader__meter">
+        <span class="loader__count mono"><span data-count>00</span>%</span>
+        <span class="loader__bar"><i></i></span>
+        <span class="loader__label mono">Chilling the glassware</span>
+      </div>
+      <div class="loader__gate">
+        <button class="btn btn--gold loader__enter" type="button" data-magnetic disabled>
+          <span class="btn__label">Step inside</span>
+          <svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+        <p class="loader__legal">By entering you confirm you are of legal drinking age in your country.</p>
+      </div>
+    </div>
+    <div class="loader__curtain" aria-hidden="true"></div>
+  </div>
+
+  <!-- ============ CHROME ============ -->
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><span class="cursor__label"></span></span></div>
+  <figure class="hover-reveal" aria-hidden="true"><div class="hover-reveal__inner"><img alt=""></div></figure>
+
+  <header class="header">
+    <a href="#story" class="brand" data-scroll-to aria-label="Night Out, back to top">
+      <span class="brand__night">Night</span><em class="brand__out">Out</em>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#manifesto" data-scroll-to>Story</a>
+      <a href="#menu" data-scroll-to>Menu</a>
+      <a href="#ritual" data-scroll-to>Ritual</a>
+      <a href="#kitchen" data-scroll-to>Kitchen</a>
+      <a href="#nights" data-scroll-to>Nights</a>
+    </nav>
+    <div class="header__right">
+      <p class="clock mono" aria-label="The night so far"><span class="clock__dot"></span><span data-clock>21:00</span></p>
+      <a href="#reserve" class="btn btn--line btn--sm" data-scroll-to data-magnetic><span class="btn__label">Reserve</span></a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="overlay" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+    <span class="header__progress" aria-hidden="true"><i></i></span>
+  </header>
+
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <nav class="overlay__nav" aria-label="Mobile">
+      <a href="#manifesto" data-scroll-to><span class="mono">01</span>Story</a>
+      <a href="#menu" data-scroll-to><span class="mono">02</span>Menu</a>
+      <a href="#ritual" data-scroll-to><span class="mono">03</span>Ritual</a>
+      <a href="#kitchen" data-scroll-to><span class="mono">04</span>Kitchen</a>
+      <a href="#nights" data-scroll-to><span class="mono">05</span>Nights</a>
+      <a href="#reserve" data-scroll-to><span class="mono">06</span>Reserve</a>
+    </nav>
+    <p class="overlay__foot mono">Tue — Sun · 18:00 — 03:00</p>
+  </div>
+
+  <main id="main">
+
+    <!-- ============ ACT I — SCROLL STORY (HERO) ============ -->
+    <section class="story" id="story" aria-label="Night Out — the story of one night">
+      <div class="story__pin">
+        <canvas class="story__ambient" aria-hidden="true"></canvas>
+        <div class="story__shade" aria-hidden="true"></div>
+
+        <div class="story__frame">
+          <canvas class="story__canvas" role="img" aria-label="A procession of signature cocktails placed one after another on the bar"></canvas>
+          <span class="corner corner--tl"></span><span class="corner corner--tr"></span><span class="corner corner--bl"></span><span class="corner corner--br"></span>
+          <span class="story__rec mono" aria-hidden="true"><i></i>Live from the bar</span>
+        </div>
+
+        <h1 class="story__title">
+          <span class="story__word story__word--l">Night</span>
+          <span class="story__word story__word--r"><em>Out</em></span>
+        </h1>
+        <p class="story__kicker">A cocktail house for the hours after dark</p>
+
+        <div class="story__acts">
+          <article class="act" data-from="21" data-to="60">
+            <p class="act__num mono">Act I — 21:00</p>
+            <h2 class="act__title">Dusk.<br><em>The first pour.</em></h2>
+            <p class="act__copy">The city exhales. Glassware leaves the freezer, citrus is cut to order, and the first coupe of the night lands on cold marble.</p>
+          </article>
+          <article class="act" data-from="61" data-to="104">
+            <p class="act__num mono">Act II — 23:00</p>
+            <h2 class="act__title">Colour<br><em>after dark.</em></h2>
+            <p class="act__copy">Hibiscus, butterfly pea, blood orange. We build drinks the way a cinematographer lights a scene — layer by layer.</p>
+          </article>
+          <article class="act" data-from="105" data-to="140">
+            <p class="act__num mono">Act III — 01:00</p>
+            <h2 class="act__title">Craft,<br><em>glass by glass.</em></h2>
+            <p class="act__copy">Forty-two house recipes. Every one measured to the millilitre, stirred to the second, garnished by hand.</p>
+          </article>
+          <article class="act" data-from="141" data-to="164">
+            <p class="act__num mono">Act IV — 03:00</p>
+            <h2 class="act__title">Your night<br><em>starts here.</em></h2>
+            <p class="act__copy">Pull up a stool. The bar is open until three.</p>
+            <a href="#reserve" class="btn btn--gold act__cta" data-scroll-to data-magnetic><span class="btn__label">Book a table</span><svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+          </article>
+        </div>
+
+        <aside class="pour" aria-live="off">
+          <p class="pour__label mono">Now pouring</p>
+          <div class="pour__name-wrap"><p class="pour__name" data-pour-name>Scarlet Hour</p></div>
+          <p class="pour__notes" data-pour-notes>Gin · raspberry · rose · egg white</p>
+          <p class="pour__count mono"><span data-pour-index>01</span> / <span data-pour-total>13</span></p>
+        </aside>
+
+        <div class="story__rail" aria-hidden="true">
+          <span class="mono">Dusk</span>
+          <span class="story__bar"><i></i></span>
+          <span class="mono">Last call</span>
+        </div>
+
+        <p class="story__hint mono" aria-hidden="true"><span class="story__hint-line"></span>Scroll to pour</p>
+      </div>
+    </section>
+
+    <!-- ============ MANIFESTO ============ -->
+    <section class="manifesto section" id="manifesto">
+      <p class="eyebrow mono"><span>(01)</span> The house</p>
+      <p class="manifesto__text" data-words>
+        We pour
+        <span class="pill" aria-hidden="true"><img src="assets/img/smoke-martini.webp" alt="" loading="lazy"></span>
+        the hours between dusk and dawn — slow, deliberate, and a little dangerous. No menus the size of novels.
+        <span class="pill" aria-hidden="true"><img src="assets/img/toast-rocks.webp" alt="" loading="lazy"></span>
+        Just
+        <em>forty-two drinks</em>
+        we would defend with our lives, a kitchen that cooks over open fire, and a room built for staying
+        <em>one more round.</em>
+      </p>
+      <dl class="stats">
+        <div class="stat"><dt class="mono">House cocktails</dt><dd><span data-counter="42">0</span></dd></div>
+        <div class="stat"><dt class="mono">Bottles on the back bar</dt><dd><span data-counter="180">0</span></dd></div>
+        <div class="stat"><dt class="mono">Last call</dt><dd><span data-counter="3">0</span><small>AM</small></dd></div>
+        <div class="stat"><dt class="mono">Seats at the bar</dt><dd><span data-counter="28">0</span></dd></div>
+      </dl>
+    </section>
+
+    <!-- ============ SMOKE REVEAL (SECOND SCRUB) ============ -->
+    <section class="reveal" id="reveal" aria-label="Signature serve: the Ember Cloud">
+      <div class="reveal__pin">
+        <div class="reveal__stage">
+          <canvas class="reveal__canvas" role="img" aria-label="A smoke-filled bubble settles on a red coupe and bursts into a cloud"></canvas>
+        </div>
+        <div class="reveal__copy">
+          <p class="eyebrow mono"><span>(02)</span> The signature</p>
+          <h2 class="display">Some things are<br><em>worth the wait.</em></h2>
+          <p class="reveal__lede">The Ember Cloud arrives sealed under a bubble of applewood smoke. It breaks at your table — and only at your table.</p>
+        </div>
+        <ol class="reveal__steps">
+          <li class="step"><span class="mono">01</span><div><h3>Sealed</h3><p>A bubble of applewood smoke is blown by hand.</p></div></li>
+          <li class="step"><span class="mono">02</span><div><h3>Settled</h3><p>It rests on a rim of smoked salt and cacao.</p></div></li>
+          <li class="step"><span class="mono">03</span><div><h3>Released</h3><p>One touch, and the cloud rolls across the bar.</p></div></li>
+        </ol>
+        <div class="reveal__tag">
+          <p class="mono">Ember Cloud</p>
+          <p class="reveal__spec">Reposado · blood orange · smoked agave · Campari</p>
+          <p class="reveal__price">$24</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SIGNATURES (HORIZONTAL) ============ -->
+    <section class="menu" id="menu" aria-label="Signature cocktails">
+      <div class="menu__pin">
+        <div class="menu__head">
+          <p class="eyebrow mono"><span>(03)</span> The signatures</p>
+          <h2 class="display" data-split>Eight drinks.<br><em>No second thoughts.</em></h2>
+          <p class="menu__drag mono" aria-hidden="true">Scroll <span class="menu__arrow">→</span></p>
+        </div>
+        <div class="menu__viewport">
+          <ul class="menu__track">
+            <li class="card" data-cursor="Taste">
+              <div class="card__media"><img src="assets/img/spritz.webp" alt="Ruby-red spritz in a balloon glass with orange and berries" loading="lazy"></div>
+              <div class="card__body"><span class="card__no mono">01</span><h3 class="card__name">Scarlet Hour</h3><p class="card__notes">Gin · Campari · blood orange · prosecco</p><p class="card__price">$18</p></div>
+            </li>
+            <li class="card" data-cursor="Taste">
+              <div class="card__media"><img src="assets/img/smoked-cocktail.webp" alt="Smoking cocktail beside small bottles and a clove-studded orange" loading="lazy"></div>
+              <div class="card__body"><span class="card__no mono">02</span><h3 class="card__name">Smoke Signal</h3><p class="card__notes">Mezcal · Aperol · smoked rosemary</p><p class="card__price">$21</p></div>
+            </li>
+            <li class="card" data-cursor="Taste">
+              <div class="card__media"><img src="assets/img/shaker-gold.webp" alt="Golden sour in a coupe next to a brass shaker" loading="lazy"></div>
+              <div class="card__body"><span class="card__no mono">03</span><h3 class="card__name">Gilded Sour</h3><p class="card__notes">Bourbon · honey · lemon · gold leaf</p><p class="card__price">$19</p></div>
+            </li>
+            <li class="card" data-cursor="Taste">
+              <div class="card__media"><img src="assets/img/blue-horn.webp" alt="Pale blue cocktail served in a glass drinking horn" loading="lazy"></div>
+              <div class="card__body"><span class="card__no mono">04</span><h3 class="card__name">Blue Horn</h3><p class="card__notes">Gin · butterfly pea · elderflower · tonic</p><p class="card__price">$20</p></div>
+            </li>
+            <li class="card" data-cursor="Taste">
+              <div class="card__media"><img src="assets/img/smoke-martini.webp" alt="Red martini glass surrounded by rolling dry-ice smoke" loading="lazy"></div>
+              <div class="card__body"><span class="card__no mono">05</span><h3 class="card__name">Ghost of Havana</h3><p class="card__notes">Aged rum · cherry · lime · dry ice</p><p class="card__price">$22</p></div>
+            </li>
+            <li class="card" data-cursor="Taste">
+              <div class="card__media"><img src="assets/img/gin-tonic.webp" alt="Gin and tonic in a balloon glass with orange and rosemary" loading="lazy"></div>
+              <div class="card__body"><span class="card__no mono">06</span><h3 class="card__name">Orchard After Dark</h3><p class="card__notes">Gin · orange · rosemary · tonic</p><p class="card__price">$17</p></div>
+            </li>
+            <li class="card" data-cursor="Taste">
+              <div class="card__media"><img src="assets/img/bar-trio.webp" alt="Three cocktails glowing on a bar in front of a wall of bottles" loading="lazy"></div>
+              <div class="card__body"><span class="card__no mono">07</span><h3 class="card__name">Old Town Negroni</h3><p class="card__notes">Gin · bitter red · vermouth · orange oil</p><p class="card__price">$18</p></div>
+            </li>
+            <li class="card" data-cursor="Taste">
+              <div class="card__media"><img src="assets/img/berry-coupes.webp" alt="Three berry-topped coupes with lime under blue light" loading="lazy"></div>
+              <div class="card__body"><span class="card__no mono">08</span><h3 class="card__name">Velvet Berry</h3><p class="card__notes">Vodka · blackberry · lime · cream soda</p><p class="card__price">$17</p></div>
+            </li>
+            <li class="menu__end">
+              <p class="mono">Plus 34 more on the night</p>
+              <a href="#reserve" class="btn btn--line" data-scroll-to data-magnetic><span class="btn__label">Come taste them</span></a>
+            </li>
+          </ul>
+        </div>
+        <div class="menu__progress" aria-hidden="true"><i></i></div>
+      </div>
+    </section>
+
+    <!-- ============ RITUAL (EXPANDING VIDEO) ============ -->
+    <section class="ritual" id="ritual" aria-label="The ritual">
+      <div class="ritual__pin">
+        <div class="ritual__words" aria-hidden="true">
+          <span>Shake</span><span><em>Strain</em></span><span>Pour</span>
+        </div>
+        <div class="ritual__media">
+          <video class="ritual__video" src="assets/video/ritual.mp4" poster="assets/video/ritual.jpg" muted loop playsinline preload="metadata" aria-label="A bartender rims a glass, strains, and pours a sequence of cocktails"></video>
+          <div class="ritual__veil"></div>
+        </div>
+        <div class="ritual__copy">
+          <p class="eyebrow mono"><span>(04)</span> The ritual</p>
+          <h2 class="display">Theatre,<br><em>but you can drink it.</em></h2>
+          <p>Every serve is a small performance — chilled steel, a rim of spice, a fine strain, the slow pour. Sit at the bar and you get a front-row seat.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BACK BAR ============ -->
+    <section class="library section" id="library" aria-label="The back bar">
+      <div class="library__grid">
+        <div class="library__media">
+          <div class="library__frame">
+            <video src="assets/video/library.mp4" poster="assets/video/library.jpg" muted loop playsinline preload="metadata" data-autoplay aria-label="A bartender measures pours from a rotating cast of whisky, gin and vodka bottles"></video>
+            <span class="corner corner--tl"></span><span class="corner corner--br"></span>
+          </div>
+        </div>
+        <div class="library__list">
+          <p class="eyebrow mono"><span>(05)</span> The back bar</p>
+          <h2 class="display" data-split>One hundred and eighty<br><em>bottles deep.</em></h2>
+          <p class="library__lede">From everyday heroes to the bottle we only open for birthdays. Ask the bar for a flight — we'll pour you a journey.</p>
+          <ul class="rows">
+            <li class="row" data-reveal-img="assets/img/whisky-collection.webp"><span class="row__name">Whisky</span><span class="row__meta mono">Scotch · Japanese · Bourbon</span><span class="row__count">64</span></li>
+            <li class="row" data-reveal-img="assets/img/gin-goblets.webp"><span class="row__name">Gin</span><span class="row__meta mono">London dry · Botanical</span><span class="row__count">31</span></li>
+            <li class="row" data-reveal-img="assets/img/tropical-board.webp"><span class="row__name">Rum</span><span class="row__meta mono">Agricole · Aged · Spiced</span><span class="row__count">27</span></li>
+            <li class="row" data-reveal-img="assets/img/ice-tongs.webp"><span class="row__name">Vodka</span><span class="row__meta mono">Grain · Potato · Grape</span><span class="row__count">22</span></li>
+            <li class="row" data-reveal-img="assets/img/tequila-row.webp"><span class="row__name">Agave</span><span class="row__meta mono">Tequila · Mezcal · Raicilla</span><span class="row__count">19</span></li>
+            <li class="row" data-reveal-img="assets/img/backbar.webp"><span class="row__name">Cognac</span><span class="row__meta mono">VS · VSOP · XO</span><span class="row__count">17</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ KITCHEN ============ -->
+    <section class="kitchen section" id="kitchen" aria-label="The kitchen">
+      <div class="kitchen__head">
+        <p class="eyebrow mono"><span>(06)</span> Fire &amp; smoke kitchen</p>
+        <h2 class="display display--xl" data-split>Cooked over<br><em>open flame.</em></h2>
+      </div>
+      <div class="kitchen__collage">
+        <figure class="kc kc--a" data-speed="-12"><img src="assets/img/tomahawk.webp" alt="Charred tomahawk steak sliced on a wooden board with garlic and herbs" loading="lazy"></figure>
+        <figure class="kc kc--b" data-speed="8"><img src="assets/img/steak-sliced.webp" alt="Sliced ribeye with a fork on a dark board" loading="lazy"></figure>
+        <figure class="kc kc--c" data-speed="-6"><img src="assets/img/steak-plate.webp" alt="Grilled steak on a white plate with rosemary and jus" loading="lazy"></figure>
+        <figure class="kc kc--d" data-speed="16"><img src="assets/img/steak-board.webp" alt="Herb-crusted sliced steak on a board" loading="lazy"></figure>
+      </div>
+      <ul class="dishes">
+        <li class="dish"><div><h3>Tomahawk for two</h3><p>1.2kg, ember-roasted, bone-marrow butter</p></div><p class="dish__pair mono">Pairs with Gilded Sour</p><p class="dish__price">$96</p></li>
+        <li class="dish"><div><h3>Bavette &amp; smoked salt</h3><p>Charred shallot, chimichurri verde</p></div><p class="dish__pair mono">Pairs with Smoke Signal</p><p class="dish__price">$34</p></li>
+        <li class="dish"><div><h3>Wagyu striploin</h3><p>Marble score 7, black garlic jus</p></div><p class="dish__pair mono">Pairs with Old Town Negroni</p><p class="dish__price">$58</p></li>
+      </ul>
+    </section>
+
+    <!-- ============ NIGHTS ============ -->
+    <section class="nights section" id="nights" aria-label="The week at Night Out">
+      <div class="nights__head">
+        <p class="eyebrow mono"><span>(07)</span> The week</p>
+        <h2 class="display" data-split>Every night<br><em>has a mood.</em></h2>
+      </div>
+      <ul class="rows rows--nights">
+        <li class="row" data-reveal-img="assets/img/wine-pour.webp"><span class="row__day mono">Tue</span><span class="row__name">Vinyl &amp; Vermouth</span><span class="row__meta mono">Records from 20:00</span></li>
+        <li class="row" data-reveal-img="assets/img/tequila-hand.webp"><span class="row__day mono">Wed</span><span class="row__name">Agave Society</span><span class="row__meta mono">Mezcal flights</span></li>
+        <li class="row" data-reveal-img="assets/img/whisky-toast.webp"><span class="row__day mono">Thu</span><span class="row__name">Smoke &amp; Jazz</span><span class="row__meta mono">Live trio · 21:30</span></li>
+        <li class="row" data-reveal-img="assets/img/neon-highballs.webp"><span class="row__day mono">Fri</span><span class="row__name">The Late Set</span><span class="row__meta mono">DJ until 03:00</span></li>
+        <li class="row" data-reveal-img="assets/img/party-glasses.webp"><span class="row__day mono">Sat</span><span class="row__name">Night Out</span><span class="row__meta mono">The main event</span></li>
+        <li class="row" data-reveal-img="assets/img/window-row.webp"><span class="row__day mono">Sun</span><span class="row__name">Slow Sunday</span><span class="row__meta mono">Roast &amp; spritz</span></li>
+      </ul>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="gallery" aria-label="Inside Night Out">
+      <p class="gallery__title display" aria-hidden="true"><em>The room</em></p>
+      <div class="marquee" data-dir="1">
+        <div class="marquee__track">
+          <img src="assets/img/backbar.webp" alt="Back bar lined with single malt bottles" loading="lazy">
+          <img src="assets/img/marble-trio.webp" alt="Three cocktails on a marble bar" loading="lazy">
+          <img src="assets/img/lineup.webp" alt="A row of cocktails on a dark counter" loading="lazy">
+          <img src="assets/img/toast-rocks.webp" alt="Two whisky glasses raised in a toast" loading="lazy">
+          <img src="assets/img/neon-row.webp" alt="Colourful highballs lined up under bar lights" loading="lazy">
+          <img src="assets/img/margaritas.webp" alt="Margaritas on a tray in a lively bar" loading="lazy">
+          <img src="assets/img/shaker-pour.webp" alt="Bartender pouring from a copper shaker into a coupe" loading="lazy">
+        </div>
+      </div>
+      <div class="marquee" data-dir="-1">
+        <div class="marquee__track">
+          <img src="assets/img/gin-goblets.webp" alt="Gin goblets on a black marble bar" loading="lazy">
+          <img src="assets/img/whisky-collection.webp" alt="A collection of whisky bottles glowing amber" loading="lazy">
+          <img src="assets/img/tequila-row.webp" alt="Tequila shots with salt rims and lemon" loading="lazy">
+          <img src="assets/img/window-row.webp" alt="Bright cocktails lined up by a window" loading="lazy">
+          <img src="assets/img/ice-tongs.webp" alt="Ice dropped into a whisky glass" loading="lazy">
+          <img src="assets/img/neon-highballs.webp" alt="Three highballs glowing under blue light" loading="lazy">
+          <img src="assets/img/party-glasses.webp" alt="Party cocktails crowded on a table" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RESERVE ============ -->
+    <section class="reserve section" id="reserve" aria-label="Reserve a table">
+      <div class="reserve__media">
+        <video src="assets/video/mojito.mp4" poster="assets/video/mojito.jpg" muted loop playsinline preload="metadata" data-autoplay aria-hidden="true"></video>
+      </div>
+      <div class="reserve__panel">
+        <p class="eyebrow mono"><span>(08)</span> Reservations</p>
+        <h2 class="display" data-split>Save me<br><em>a seat.</em></h2>
+
+        <form class="form" novalidate>
+          <fieldset class="field field--guests">
+            <legend class="field__label mono">Guests</legend>
+            <div class="chips" role="radiogroup">
+              <label class="chip"><input type="radio" name="guests" value="1"><span>1</span></label>
+              <label class="chip"><input type="radio" name="guests" value="2" checked><span>2</span></label>
+              <label class="chip"><input type="radio" name="guests" value="3"><span>3</span></label>
+              <label class="chip"><input type="radio" name="guests" value="4"><span>4</span></label>
+              <label class="chip"><input type="radio" name="guests" value="5"><span>5</span></label>
+              <label class="chip"><input type="radio" name="guests" value="6+"><span>6+</span></label>
+            </div>
+          </fieldset>
+          <div class="form__row">
+            <div class="field">
+              <label class="field__label mono" for="f-date">Date</label>
+              <input class="field__input" id="f-date" name="date" type="date" required>
+              <p class="field__error" id="e-date" role="alert"></p>
+            </div>
+            <div class="field">
+              <label class="field__label mono" for="f-time">Time</label>
+              <select class="field__input" id="f-time" name="time" required>
+                <option value="">Choose</option>
+                <option>18:00</option><option>19:00</option><option>20:00</option><option>21:00</option><option>22:00</option><option>23:00</option>
+              </select>
+              <p class="field__error" id="e-time" role="alert"></p>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label mono" for="f-name">Name</label>
+            <input class="field__input" id="f-name" name="name" type="text" autocomplete="name" required placeholder="Who's the table for?">
+            <p class="field__error" id="e-name" role="alert"></p>
+          </div>
+          <div class="field">
+            <label class="field__label mono" for="f-email">Email</label>
+            <input class="field__input" id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="We'll send the confirmation here">
+            <p class="field__error" id="e-email" role="alert"></p>
+          </div>
+          <button class="btn btn--gold btn--block" type="submit" data-magnetic>
+            <span class="btn__label">Hold my table</span>
+            <svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <p class="form__note">Concept experience — no booking is actually made.</p>
+        </form>
+
+        <div class="ticket" hidden tabindex="-1">
+          <p class="mono ticket__eyebrow">Table held</p>
+          <p class="ticket__title">See you<br><em><span data-t-when>tonight</span><span data-t-name></span>.</em></p>
+          <dl class="ticket__grid">
+            <div><dt class="mono">Guests</dt><dd data-t-guests></dd></div>
+            <div><dt class="mono">Date</dt><dd data-t-date></dd></div>
+            <div><dt class="mono">Time</dt><dd data-t-time></dd></div>
+            <div><dt class="mono">Ref</dt><dd data-t-ref></dd></div>
+          </dl>
+          <button class="btn btn--line btn--sm ticket__again" type="button"><span class="btn__label">Make another</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER / LAST CALL ============ -->
+  <footer class="footer">
+    <div class="footer__top">
+      <div class="footer__col">
+        <p class="eyebrow mono">Find us</p>
+        <p>14 Ember Lane<br>Old Town, Downstairs</p>
+      </div>
+      <div class="footer__col">
+        <p class="eyebrow mono">Hours</p>
+        <p>Tue — Thu · 18:00 — 01:00<br>Fri — Sat · 18:00 — 03:00<br>Sun · 16:00 — 00:00</p>
+      </div>
+      <div class="footer__col">
+        <p class="eyebrow mono">Say hello</p>
+        <p><a class="link" href="mailto:hello@nightout.bar">hello@nightout.bar</a><br><a class="link" href="tel:+15550134270">+1 555 013 4270</a></p>
+      </div>
+      <div class="footer__col footer__social">
+        <p class="eyebrow mono">Follow</p>
+        <p>
+          <a class="icon-link" href="#" aria-label="Night Out on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a class="icon-link" href="#" aria-label="Night Out on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.7 2.3 4.4 5 4.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+          <a class="icon-link" href="#" aria-label="Night Out on Spotify"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 9.5c3-1 6.5-.7 9 .8M8 12.7c2.5-.7 5.2-.4 7.3.9M8.7 15.6c1.9-.5 3.8-.3 5.4.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        </p>
+      </div>
+    </div>
+    <p class="footer__last mono">Last call</p>
+    <p class="footer__mark" aria-hidden="true"><span>Night</span> <em>Out</em></p>
+    <div class="footer__bottom mono">
+      <span>© Night Out — concept experience</span>
+      <span>Please drink responsibly</span>
+      <a href="#story" data-scroll-to class="link">Back to dusk ↑</a>
+    </div>
+  </footer>
+
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="vendor/SplitText.min.js"></script>
+  <script src="vendor/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
