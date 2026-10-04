@@ -15,6 +15,16 @@ python3 -m http.server 8080   # or: npx serve .
 
 Serve it over HTTP rather than opening `index.html` directly, so the frame sequences load reliably.
 
+## Single-file build
+
+```bash
+python3 build-single.py   # writes dist/night-out.html (about 15 MB)
+```
+
+This embeds every stylesheet, script, font, image, video and frame into one HTML file. It opens by
+double-click with no server and no other files beside it, which makes it easy to email or drop on a USB stick
+for a pitch. `dist/` is git-ignored. Rebuild it after changing the source.
+
 ## Story structure
 
 | # | Section | Technique |

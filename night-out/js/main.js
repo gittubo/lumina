@@ -69,7 +69,11 @@
       this.resize();
     }
 
-    src(i) { return `${this.dir}/${pad(i + 1, 3)}.webp`; }
+    src(i) {
+      // Single-file build embeds frames in window.NIGHT_OUT_FRAMES; otherwise load from disk
+      const embedded = window.NIGHT_OUT_FRAMES && window.NIGHT_OUT_FRAMES[this.dir];
+      return embedded ? embedded[i] : `${this.dir}/${pad(i + 1, 3)}.webp`;
+    }
 
     order() {
       const seen = new Set();
