@@ -26,8 +26,9 @@ describe('splitFencedCode', () => {
 describe('ChatMessageContent', () => {
   it('renders prompts in a copyable block', () => {
     render(<ChatMessageContent text={'Prompt:\n```\na fox in the snow\n```'} />);
-    expect(screen.getByText('Prompt:')).toBeInTheDocument();
-    expect(screen.getByText('a fox in the snow')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+    // getBy* throws if the element is missing, so these double as presence checks.
+    expect(screen.getByText('Prompt:').tagName).toBe('P');
+    expect(screen.getByText('a fox in the snow').tagName).toBe('CODE');
+    expect(screen.getByRole('button', { name: 'Copy' })).toBeTruthy();
   });
 });
