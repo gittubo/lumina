@@ -29,3 +29,18 @@ export const generationRateLimiter = rateLimit({
     code: 'RATE_LIMITED',
   },
 });
+
+// Each chat message is a paid Claude API call, so the assistant gets its
+// own per-user budget — separate from generations so chatting about ideas
+// doesn't eat into the user's generation allowance (or vice versa).
+export const chatRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: Number(process.env.HOURLY_CHAT_RATE_LIMIT) || 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => (req as AuthenticatedRequest).userId || req.ip || 'unknown',
+  message: {
+    error: 'Chat rate limit reached. Please slow down and try again shortly.',
+    code: 'RATE_LIMITED',
+  },
+});

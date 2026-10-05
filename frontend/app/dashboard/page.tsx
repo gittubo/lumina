@@ -98,6 +98,9 @@ export default function DashboardPage() {
               <h1 className="text-2xl font-bold text-white">LUMINA</h1>
             </Link>
             <div className="flex items-center gap-4">
+              <Link href="/dashboard/chat" className="text-sm text-purple-200 hover:text-white transition-colors">
+                Assistant
+              </Link>
               <span className="text-slate-300 text-sm hidden sm:inline">{user?.email}</span>
               <button
                 onClick={() => {

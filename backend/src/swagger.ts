@@ -17,7 +17,7 @@ const options: Options = {
       title: 'LUMINA API',
       version: '0.1.0',
       description:
-        'API for the LUMINA multimodal AI creative platform — auth, projects, and image/video/3D/audio generation.',
+        'API for the LUMINA multimodal AI creative platform — auth, projects, image/video/3D/audio generation, and the Lumina Assistant chatbot.',
     },
     servers: [{ url: '/api', description: 'Relative to this server' }],
     components: {
@@ -77,6 +77,26 @@ const options: Options = {
             userId: { type: 'string' },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' },
+          },
+        },
+        Conversation: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            title: { type: 'string' },
+            userId: { type: 'string' },
+            projectId: { type: 'string', nullable: true },
+            createdAt: { type: 'string', format: 'date-time' },
+            updatedAt: { type: 'string', format: 'date-time' },
+          },
+        },
+        ChatMessage: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            role: { type: 'string', enum: ['user', 'assistant'] },
+            text: { type: 'string' },
+            createdAt: { type: 'string', format: 'date-time' },
           },
         },
       },

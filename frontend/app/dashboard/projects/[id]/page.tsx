@@ -183,9 +183,17 @@ export default function ProjectDetailPage() {
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-white">{project?.title}</h2>
-          {project?.description && <p className="text-slate-400 mt-1">{project.description}</p>}
+        <div className="mb-8 flex justify-between items-start gap-4">
+          <div>
+            <h2 className="text-3xl font-bold text-white">{project?.title}</h2>
+            {project?.description && <p className="text-slate-400 mt-1">{project.description}</p>}
+          </div>
+          <Link
+            href={`/dashboard/chat?project=${projectId}`}
+            className="shrink-0 px-4 py-2 text-sm text-purple-200 border border-purple-500/40 hover:border-purple-400 hover:text-white rounded-lg transition-colors"
+          >
+            Ask the assistant
+          </Link>
         </div>
 
         {error && (

@@ -53,6 +53,18 @@ Example — image generation:
 
 Video (Runway) and 3D (Meshy) follow the same shape, but their workers poll a provider-side task ID to completion rather than getting a synchronous response — video takes a few minutes, 3D is a two-stage preview→refine pipeline that can take longer. Audio (Eleven Labs) is unique in that the provider's TTS endpoint responds synchronously with the finished audio; it's still queued for consistency and to smooth out request bursts.
 
+## Request Flow: Lumina Assistant (chat)
+
+The chatbot doesn't use the queue — a reply is streamed straight back to the browser while it's generated.
+
+1. Frontend `POST /api/chat/conversations` (optionally with a `projectId`, ownership-checked) creates an empty `Conversation`
+2. Frontend `POST /api/chat/conversations/:id/messages` with `{ message }`; `authMiddleware`, `chatRateLimiter` (per-user hourly), and `validate(sendMessageSchema)` run first
+3. `chatService.sendMessage()` loads the conversation (scoped to `req.userId`), rebuilds the history, and calls Claude (`claude-opus-5-5` by default, override with `CHAT_MODEL`) via the Anthropic SDK's streaming API. The system prompt describes LUMINA's generators; for project-scoped chats a second system block adds the project's title, description, and recent generation prompts
+4. Each text fragment is forwarded to the browser as a Server-Sent Event (`delta`); when the reply finishes the user and assistant messages are saved in one transaction and a `done` event carries them back. Errors before the first token are a normal JSON error response; later ones arrive as an `error` event
+5. If the browser disconnects, the Claude request is aborted and nothing is saved, so a failed or stopped message can simply be re-sent
+
+Assistant messages store the full content blocks Claude returned (`ChatMessage.content`, including thinking blocks) and are replayed verbatim on later turns, keeping the history append-only as the API expects. Requests opt into server-side refusal fallback (`fallbacks: "default"`) and prompt caching of the conversation prefix.
+
 ## Key Modules
 
 ### Auth (`services/authService.ts`, `middleware/authMiddleware.ts`)
@@ -67,6 +79,7 @@ Video (Runway) and 3D (Meshy) follow the same shape, but their workers poll a pr
 ### Abuse & cost protection (`middleware/rateLimiter.ts`, `middleware/dailyGenerationCap.ts`, `validation/`)
 - `authRateLimiter` — per-IP, on `/auth/register` and `/auth/login`
 - `generationRateLimiter` — per-user, on all `/generations/*` routes
+- `chatRateLimiter` — per-user, on sending chat messages (each one is a paid Claude API call)
 - `dailyGenerationCap` — per-user, a live count of generations in the last 24h, independent of the rate limiter (bounds total spend, not just burst rate)
 - Joi schemas cap prompt length and validate enum/numeric fields before any provider is called
 

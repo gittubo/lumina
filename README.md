@@ -8,6 +8,7 @@
 - **Text-to-Video Generation** — Runway (Gen-4.5)
 - **Text-to-3D Generation** — Meshy (two-stage preview → textured refine pipeline), with an interactive Three.js viewer in the browser
 - **Text-to-Speech / Voice Synthesis** — Eleven Labs
+- **Lumina Assistant (AI chatbot)** — Claude-powered creative assistant that brainstorms ideas and writes ready-to-paste prompts for every generator; replies stream in, conversations are saved, and a chat can be scoped to a project so the assistant sees its details and recent generations
 - **Project Management** — Create projects, generate content within them, browse generation history
 - **Background Job Processing** — every generation runs through a Redis-backed Bull queue with automatic retries, so it survives a server restart mid-generation
 - **Usage Protection** — per-user hourly rate limiting, a daily generation cap, and request validation guard the app (and your API bills) against runaway usage
@@ -46,6 +47,7 @@ Not yet implemented: real-time collaboration, file export beyond the generated a
 | Runway | Video | `services/runwayService.ts`, `workers/videoGenerationWorker.ts` |
 | Meshy | 3D models | `services/meshyService.ts`, `workers/modelGenerationWorker.ts` |
 | Eleven Labs | Voice/audio | `services/elevenLabsService.ts`, `workers/audioGenerationWorker.ts` |
+| Anthropic (Claude) | Lumina Assistant chatbot | `services/chatService.ts` (streams directly, no queue) |
 
 Each provider follows the same pattern: an API route validates the request and confirms the user owns the target project, a service creates a `pending` `Generation` row and enqueues a job, and a worker (started alongside the API server) does the actual API call and updates the row to `completed`/`failed`. The frontend polls in-progress generations until they resolve.
 
@@ -105,7 +107,7 @@ lumina generate image "a red fox in the snow" --project <projectId>
 ### Prerequisites
 - Node.js 18+
 - Docker & Docker Compose (or PostgreSQL 14+ and Redis running locally)
-- API keys for whichever generation providers you want working: Stability AI, Runway, Meshy, Eleven Labs (each is optional — a provider without a key just fails that generation type with a clear error, the rest of the app works fine)
+- API keys for whichever providers you want working: Stability AI, Runway, Meshy, Eleven Labs, and Anthropic for the assistant chatbot (each is optional — a provider without a key just fails that generation type with a clear error, the rest of the app works fine)
 
 ### Installation
 
@@ -190,6 +192,8 @@ STABILITY_AI_API_KEY=...
 RUNWAY_API_KEY=...
 MESHY_API_KEY=...
 ELEVEN_LABS_API_KEY=...
+ANTHROPIC_API_KEY=...               # Lumina Assistant chatbot
+HOURLY_CHAT_RATE_LIMIT=60          # per-user, chat messages
 HOURLY_GENERATION_RATE_LIMIT=30   # per-user, generation endpoints
 DAILY_GENERATION_LIMIT=50         # per-user, all generation types combined
 ```

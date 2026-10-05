@@ -40,3 +40,23 @@ export interface ApiError {
   error: string;
   code?: string;
 }
+
+export interface Conversation {
+  id: string;
+  title: string;
+  userId: string;
+  projectId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  text: string;
+  createdAt: string;
+}
+
+export interface ConversationWithMessages extends Conversation {
+  messages: ChatMessage[];
+}
