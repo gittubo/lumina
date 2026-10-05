@@ -20,7 +20,7 @@ export async function pollUntilDone(client: AxiosInstance, id: string): Promise<
   const spinner = ora('Waiting for generation to complete…').start();
   const startedAt = Date.now();
 
-  while (true) {
+  for (;;) {
     if (Date.now() - startedAt > TIMEOUT_MS) {
       spinner.fail('Timed out waiting for the generation to complete.');
       throw new Error('Timed out waiting for generation');

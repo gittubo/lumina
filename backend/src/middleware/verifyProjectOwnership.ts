@@ -24,5 +24,5 @@ export async function verifyProjectOwnership(req: AuthenticatedRequest, res: Res
     return res.status(404).json({ error: 'Project not found', code: 'NOT_FOUND' });
   }
 
-  next();
+  return next();
 }

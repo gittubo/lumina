@@ -146,7 +146,9 @@ class AuthService {
 
   private generateToken(userId: string, email: string): string {
     return jwt.sign({ userId, email }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRY,
+      // JWT_EXPIRY is a free-form env string like "7d"; jsonwebtoken's types
+      // only accept its narrower `ms`-style template type.
+      expiresIn: JWT_EXPIRY as jwt.SignOptions['expiresIn'],
     });
   }
 }

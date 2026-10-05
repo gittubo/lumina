@@ -13,6 +13,6 @@ export function validate(schema: Joi.ObjectSchema) {
     }
 
     req.body = value;
-    next();
+    return next();
   };
 }
