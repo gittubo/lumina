@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import ChatMessageContent, { splitFencedCode } from '../ChatMessageContent';
+import ChatMessageContent, { splitFencedCode, renderInline } from '../ChatMessageContent';
 
 describe('splitFencedCode', () => {
   it('returns plain text unchanged', () => {
@@ -30,5 +30,14 @@ describe('ChatMessageContent', () => {
     expect(screen.getByText('Prompt:').tagName).toBe('P');
     expect(screen.getByText('a fox in the snow').tagName).toBe('CODE');
     expect(screen.getByRole('button', { name: 'Copy' })).toBeTruthy();
+  });
+});
+
+describe('renderInline', () => {
+  it('renders bold and inline code, leaving other text alone', () => {
+    render(<p>{renderInline('Use style **cinematic** and ratio `16:9`, 2 * 3 = 6')}</p>);
+    expect(screen.getByText('cinematic').tagName).toBe('STRONG');
+    expect(screen.getByText('16:9').tagName).toBe('CODE');
+    expect(screen.getByText(/2 \* 3 = 6/)).toBeInTheDocument();
   });
 });

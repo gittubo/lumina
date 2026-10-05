@@ -195,14 +195,18 @@ function ChatPageInner() {
             >
               Chats
             </button>
-            <Link href="/dashboard" className="text-slate-400 hover:text-white text-sm transition-colors">
-              ← Dashboard
+            <Link
+              href="/dashboard"
+              aria-label="Back to dashboard"
+              className="text-slate-400 hover:text-white text-sm transition-colors whitespace-nowrap"
+            >
+              ← <span className="hidden sm:inline">Dashboard</span>
             </Link>
           </div>
-          <h1 className="text-lg font-semibold text-white">Lumina Assistant</h1>
+          <h1 className="text-base sm:text-lg font-semibold text-white truncate px-2">Lumina Assistant</h1>
           <button
             onClick={startNewChat}
-            className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-medium transition-all"
+            className="whitespace-nowrap shrink-0 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-medium transition-all"
           >
             New chat
           </button>

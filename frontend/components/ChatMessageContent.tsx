@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import type React from 'react';
 
 type Segment = { kind: 'text'; value: string } | { kind: 'code'; value: string; lang: string };
 
@@ -22,6 +23,24 @@ export function splitFencedCode(text: string): Segment[] {
   if (last < text.length) segments.push({ kind: 'text', value: text.slice(last) });
 
   return segments.filter((s) => s.kind === 'code' || s.value.trim() !== '');
+}
+
+// Claude often uses **bold** and `inline code` in prose; render just those
+// two so they don't show up as literal asterisks and backticks.
+export function renderInline(text: string): React.ReactNode[] {
+  return text.split(/(\*\*[^*\n]+\*\*|`[^`\n]+`)/g).map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+      return <strong key={i} className="font-semibold text-white">{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith('`') && part.endsWith('`') && part.length > 2) {
+      return (
+        <code key={i} className="px-1 py-0.5 rounded bg-slate-950/60 text-purple-200 text-[0.9em]">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
 }
 
 function CodeBlock({ value, lang }: { value: string; lang: string }) {
@@ -61,7 +80,7 @@ export default function ChatMessageContent({ text }: { text: string }) {
           <CodeBlock key={i} value={segment.value} lang={segment.lang} />
         ) : (
           <p key={i} className="whitespace-pre-wrap break-words">
-            {segment.value.replace(/^\n+|\n+$/g, '')}
+            {renderInline(segment.value.replace(/^\n+|\n+$/g, ''))}
           </p>
         )
       )}
