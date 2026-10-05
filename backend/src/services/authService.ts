@@ -8,7 +8,7 @@ import emailService from './emailService';
 const prisma = new PrismaClient();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-const JWT_EXPIRY = process.env.JWT_EXPIRY || '7d';
+const JWT_EXPIRY = (process.env.JWT_EXPIRY || '7d') as jwt.SignOptions['expiresIn'];
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 

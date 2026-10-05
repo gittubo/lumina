@@ -32,5 +32,5 @@ export async function dailyGenerationCap(req: AuthenticatedRequest, res: Respons
     });
   }
 
-  next();
+  return next();
 }
