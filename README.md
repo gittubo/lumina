@@ -12,6 +12,8 @@
 - **Background Job Processing** — every generation runs through a Redis-backed Bull queue with automatic retries, so it survives a server restart mid-generation
 - **Usage Protection** — per-user hourly rate limiting, a daily generation cap, and request validation guard the app (and your API bills) against runaway usage
 
+The repo also contains a standalone **[AI Resume Analyzer](resume-analyzer/README.md)** (`resume-analyzer/`), a separate Next.js app that scores resumes, matches them against job descriptions, flags ATS issues and suggests rewrites using Claude.
+
 Not yet implemented: real-time collaboration, file export beyond the generated asset URL itself.
 
 ## 📋 Tech Stack
