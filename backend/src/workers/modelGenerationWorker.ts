@@ -26,7 +26,7 @@ interface MeshyTask {
 async function pollTask(taskId: string, headers: Record<string, string>): Promise<MeshyTask> {
   const startedAt = Date.now();
 
-  while (true) {
+  for (;;) {
     if (Date.now() - startedAt > STAGE_TIMEOUT_MS) {
       throw new Error('Timed out waiting for Meshy task to complete');
     }

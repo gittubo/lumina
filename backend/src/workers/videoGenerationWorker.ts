@@ -69,7 +69,7 @@ export function startVideoGenerationWorker() {
       // Poll until the task resolves or we exceed the timeout. This job's
       // Bull lock duration is set well above POLL_TIMEOUT_MS (see the queue
       // definition) so the lock won't expire mid-poll.
-      while (true) {
+      for (;;) {
         if (Date.now() - startedAt > POLL_TIMEOUT_MS) {
           throw new Error('Timed out waiting for Runway video generation to complete');
         }

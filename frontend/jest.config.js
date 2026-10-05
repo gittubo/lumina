@@ -2,14 +2,17 @@ const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
   // Points at the Next.js app root so next/jest can load next.config.js
-  // and .env files, and so it can read tsconfig.json's `paths` to resolve
-  // the `@/*` alias automatically — no manual moduleNameMapper needed.
+  // and .env files.
   dir: './',
 });
 
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
+  // next/jest doesn't read tsconfig.json `paths`, so map the `@/*` alias here.
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1',
+  },
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
 };
 
