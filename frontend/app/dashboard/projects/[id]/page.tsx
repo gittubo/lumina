@@ -16,19 +16,15 @@ import {
   getApiErrorMessage,
 } from '@/lib/api';
 import type { Project, Generation, GenerationType } from '@/types';
-
-const ASPECT_RATIOS = ['1:1', '16:9', '9:16', '4:3', '3:4'];
-const STYLES = ['photorealistic', 'anime', 'digital-art', 'cinematic', 'fantasy-art', 'low-poly'];
-const VIDEO_RATIOS = ['1280:720', '720:1280', '1920:1080'];
-const VIDEO_DURATIONS = [5, 10];
-const MODEL_TOPOLOGIES: Array<'triangle' | 'quad'> = ['triangle', 'quad'];
-// A few of ElevenLabs' standard premade voices
-const VOICES = [
-  { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel' },
-  { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi' },
-  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella' },
-  { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni' },
-];
+import {
+  ASPECT_RATIOS,
+  STYLES,
+  VIDEO_RATIOS,
+  VIDEO_DURATIONS,
+  MODEL_TOPOLOGIES,
+  VOICES,
+} from '@/lib/generationOptions';
+import { readPromptHandoff } from '@/lib/promptHandoff';
 
 const ACTIVE_STATUSES: Generation['status'][] = ['pending', 'processing'];
 
@@ -56,7 +52,11 @@ export default function ProjectDetailPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeModel, setActiveModel] = useState<{ url: string; prompt: string } | null>(null);
 
+  const [fromAssistant, setFromAssistant] = useState(false);
+
   const pollingIds = useRef<Set<string>>(new Set());
+  const promptRef = useRef<HTMLTextAreaElement>(null);
+  const handoffApplied = useRef(false);
 
   useEffect(() => {
     if (isHydrated && !token) {
@@ -83,6 +83,33 @@ export default function ProjectDetailPage() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  // "Use this prompt" from the Lumina Assistant links here with the prompt
+  // and suggested settings in the query string. Prefill the form once the
+  // page has loaded, then drop the query so a refresh doesn't re-apply it.
+  // Nothing is submitted: the user reviews and clicks Generate themselves.
+  useEffect(() => {
+    if (isLoading || handoffApplied.current) return;
+    handoffApplied.current = true;
+
+    const handoff = readPromptHandoff(new URLSearchParams(window.location.search));
+    if (!handoff) return;
+
+    setGenType(handoff.type);
+    setPrompt(handoff.prompt);
+    if (handoff.style) setStyle(handoff.style);
+    if (handoff.aspectRatio) setAspectRatio(handoff.aspectRatio);
+    if (handoff.negativePrompt) setNegativePrompt(handoff.negativePrompt);
+    if (handoff.videoRatio) setVideoRatio(handoff.videoRatio);
+    if (handoff.videoDuration) setVideoDuration(handoff.videoDuration);
+    if (handoff.topology) setModelTopology(handoff.topology);
+    if (handoff.enablePbr !== undefined) setModelEnablePbr(handoff.enablePbr);
+    if (handoff.voiceId) setVoiceId(handoff.voiceId);
+    setFromAssistant(true);
+
+    router.replace(`/dashboard/projects/${projectId}`, { scroll: false });
+    promptRef.current?.focus();
+  }, [isLoading, projectId, router]);
 
   // Poll any pending/processing generations every 3s until they resolve
   useEffect(() => {
@@ -147,6 +174,7 @@ export default function ProjectDetailPage() {
       }
 
       setGenerations((prev) => [generation, ...prev]);
+      setFromAssistant(false);
       setPrompt('');
       setNegativePrompt('');
     } catch (err) {
@@ -219,6 +247,12 @@ export default function ProjectDetailPage() {
           ))}
         </div>
 
+        {fromAssistant && (
+          <div className="mb-4 px-4 py-3 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-200 text-sm">
+            Prompt and settings filled in from the Lumina Assistant. Review them, then click Generate.
+          </div>
+        )}
+
         <form
           onSubmit={handleSubmit}
           className="mb-10 bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 space-y-4"
@@ -229,6 +263,7 @@ export default function ProjectDetailPage() {
             </label>
             <textarea
               id="prompt"
+              ref={promptRef}
               required
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}

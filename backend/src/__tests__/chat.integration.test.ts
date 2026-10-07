@@ -293,6 +293,8 @@ describe('POST /api/chat/conversations/:id/messages', () => {
 
     const system = mockStream.mock.calls[0][0].system;
     expect(system).toHaveLength(2);
+    // The frontend's "Use this prompt" button relies on this fence-label format.
+    expect(system[0].text).toContain('```image style=cinematic aspectRatio=16:9');
     expect(system[1].text).toContain('Forest Short Film');
     expect(system[1].text).toContain('a fox at dawn');
   });

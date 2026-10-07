@@ -63,6 +63,8 @@ The chatbot doesn't use the queue — a reply is streamed straight back to the b
 4. Each text fragment is forwarded to the browser as a Server-Sent Event (`delta`); when the reply finishes the user and assistant messages are saved in one transaction and a `done` event carries them back. Errors before the first token are a normal JSON error response; later ones arrive as an `error` event
 5. If the browser disconnects, the Claude request is aborted and nothing is saved, so a failed or stopped message can simply be re-sent
 
+The system prompt asks Claude to label each ready-to-use prompt's code fence with its generator and suggested settings (e.g. ` ```image style=cinematic aspectRatio=16:9 `). The chat UI turns those blocks into a "Use this prompt" link to the project page with the prompt and settings in the query string (`frontend/lib/promptHandoff.ts`); the project page validates them against its own option lists, prefills the generate form, and leaves submitting to the user.
+
 Assistant messages store the full content blocks Claude returned (`ChatMessage.content`, including thinking blocks) and are replayed verbatim on later turns, keeping the history append-only as the API expects. Requests opt into server-side refusal fallback (`fallbacks: "default"`) and prompt caching of the conversation prefix.
 
 ## Key Modules

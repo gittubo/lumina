@@ -4,7 +4,7 @@ import { Suspense, useCallback, useEffect, useRef, useState, FormEvent, Keyboard
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/authStore';
-import ChatMessageContent from '@/components/ChatMessageContent';
+import ChatMessageContent, { PromptTarget } from '@/components/ChatMessageContent';
 import {
   listConversations,
   getConversation,
@@ -173,6 +173,7 @@ function ChatPageInner() {
   const activeConversation = conversations.find((c) => c.id === activeId);
   const scopedProjectId = activeConversation ? activeConversation.projectId : draftProjectId || null;
   const scopedProject = projects.find((p) => p.id === scopedProjectId);
+  const promptTarget: PromptTarget = { projectId: scopedProject?.id ?? null, projects };
 
   if (!isHydrated || !token) {
     return (
@@ -305,7 +306,7 @@ function ChatPageInner() {
               ) : (
                 <>
                   {messages.map((m) => (
-                    <MessageBubble key={m.id} role={m.role} text={m.text} />
+                    <MessageBubble key={m.id} role={m.role} text={m.text} target={promptTarget} />
                   ))}
                   {pending && (
                     <>
@@ -366,7 +367,15 @@ function ChatPageInner() {
   );
 }
 
-function MessageBubble({ role, text }: { role: ChatMessage['role']; text: string }) {
+function MessageBubble({
+  role,
+  text,
+  target,
+}: {
+  role: ChatMessage['role'];
+  text: string;
+  target?: PromptTarget;
+}) {
   if (role === 'user') {
     return (
       <div className="flex justify-end">
@@ -378,7 +387,7 @@ function MessageBubble({ role, text }: { role: ChatMessage['role']; text: string
   }
   return (
     <div className="text-slate-200 text-sm leading-relaxed space-y-2" data-testid="assistant-message">
-      <ChatMessageContent text={text} />
+      <ChatMessageContent text={text} target={target} />
     </div>
   );
 }
