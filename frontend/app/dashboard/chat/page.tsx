@@ -47,6 +47,9 @@ function ChatPageInner() {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
+  // Bumped whenever the user switches chats, so async work started for an
+  // earlier chat can tell it's stale and leave the current view alone.
+  const viewRef = useRef(0);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,16 +80,18 @@ function ChatPageInner() {
     setError(null);
     setActiveId(id);
     setShowSidebar(false);
+    const view = ++viewRef.current;
     try {
       const data = await getConversation(id);
-      setMessages(data.messages);
+      if (viewRef.current === view) setMessages(data.messages);
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      if (viewRef.current === view) setError(getApiErrorMessage(err));
     }
   }, []);
 
   const startNewChat = () => {
     abortRef.current?.abort();
+    viewRef.current++;
     setPending(null);
     setError(null);
     setActiveId(null);
@@ -115,14 +120,18 @@ function ChatPageInner() {
 
     const controller = new AbortController();
     abortRef.current = controller;
+    const view = viewRef.current;
 
     try {
       let conversationId = activeId;
       if (!conversationId) {
         const created = await createConversation(draftProjectId || undefined);
+        setConversations((prev) => [created, ...prev]);
+        // The user switched chats while this was being created: leave the
+        // view on whatever they opened instead of yanking it back here.
+        if (viewRef.current !== view) return;
         conversationId = created.id;
         setActiveId(created.id);
-        setConversations((prev) => [created, ...prev]);
       }
 
       const result = await sendChatMessage(

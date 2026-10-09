@@ -18,25 +18,32 @@ export const api = axios.create({
   },
 });
 
+function getStoredToken(): string | null {
+  return typeof window !== 'undefined' ? localStorage.getItem('lumina_token') : null;
+}
+
+// Called on a 401: the token is invalid/expired, so clear it and let the UI
+// redirect to login.
+function clearStoredAuth() {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('lumina_token');
+    localStorage.removeItem('lumina_user');
+  }
+}
+
 // Attach the auth token to every request if we have one
 api.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('lumina_token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  const token = getStoredToken();
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// If the token is invalid/expired, clear it so the UI can redirect to login
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401 && typeof window !== 'undefined') {
-      localStorage.removeItem('lumina_token');
-      localStorage.removeItem('lumina_user');
-    }
+    if (error.response?.status === 401) clearStoredAuth();
     return Promise.reject(error);
   }
 );
@@ -188,7 +195,7 @@ export async function sendChatMessage(
   onDelta: (text: string) => void,
   signal?: AbortSignal
 ): Promise<ChatReply> {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('lumina_token') : null;
+  const token = getStoredToken();
   const response = await fetch(`${API_URL}/api/chat/conversations/${conversationId}/messages`, {
     method: 'POST',
     headers: {
@@ -200,10 +207,7 @@ export async function sendChatMessage(
   });
 
   if (!response.ok || !response.body) {
-    if (response.status === 401 && typeof window !== 'undefined') {
-      localStorage.removeItem('lumina_token');
-      localStorage.removeItem('lumina_user');
-    }
+    if (response.status === 401) clearStoredAuth();
     const data = (await response.json().catch(() => null)) as ApiError | null;
     throw new ChatStreamError(data?.error || 'Something went wrong');
   }

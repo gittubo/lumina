@@ -24,7 +24,6 @@ export function splitFencedCode(text: string): Segment[] {
     if (match.index > last) segments.push({ kind: 'text', value: text.slice(last, match.index) });
     segments.push({ kind: 'code', lang: (match[1] ?? '').trim(), value: match[2].replace(/\n$/, '') });
     last = fence.lastIndex;
-    if (match[0].length === 0) break;
   }
   if (last < text.length) segments.push({ kind: 'text', value: text.slice(last) });
 
@@ -34,18 +33,19 @@ export function splitFencedCode(text: string): Segment[] {
 // Claude often uses **bold** and `inline code` in prose; render just those
 // two so they don't show up as literal asterisks and backticks.
 export function renderInline(text: string): React.ReactNode[] {
+  // split() with a capture group puts the matches at the odd indexes; only
+  // those get formatted, so unmatched text that merely starts and ends with
+  // the markers (e.g. a backtick pair spanning a line break) stays as typed.
   return text.split(/(\*\*[^*\n]+\*\*|`[^`\n]+`)/g).map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+    if (i % 2 === 0) return part;
+    if (part.startsWith('**')) {
       return <strong key={i} className="font-semibold text-white">{part.slice(2, -2)}</strong>;
     }
-    if (part.startsWith('`') && part.endsWith('`') && part.length > 2) {
-      return (
-        <code key={i} className="px-1 py-0.5 rounded bg-slate-950/60 text-purple-200 text-[0.9em]">
-          {part.slice(1, -1)}
-        </code>
-      );
-    }
-    return part;
+    return (
+      <code key={i} className="px-1 py-0.5 rounded bg-slate-950/60 text-purple-200 text-[0.9em]">
+        {part.slice(1, -1)}
+      </code>
+    );
   });
 }
 

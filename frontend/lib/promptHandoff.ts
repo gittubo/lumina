@@ -49,7 +49,10 @@ export function buildPromptHandoffUrl(
   options: Record<string, string> = {}
 ): string {
   const params = new URLSearchParams({ use: type, prompt });
-  for (const [key, value] of Object.entries(options)) params.set(key, value);
+  for (const [key, value] of Object.entries(options)) {
+    // A fence setting named `use` or `prompt` must not replace the real ones.
+    if (!params.has(key)) params.set(key, value);
+  }
   return `/dashboard/projects/${encodeURIComponent(projectId)}?${params.toString()}`;
 }
 

@@ -41,6 +41,11 @@ describe('buildPromptHandoffUrl / readPromptHandoff', () => {
     });
   });
 
+  it('never lets a fence setting replace the generator or prompt', () => {
+    const { handoff } = roundTrip('image', 'the real prompt', { prompt: 'x', use: 'video', style: 'anime' });
+    expect(handoff).toMatchObject({ type: 'image', prompt: 'the real prompt', style: 'anime' });
+  });
+
   it('drops settings the form does not offer', () => {
     const { handoff } = roundTrip('video', 'waves', { ratio: '4000:3', duration: '7' });
     expect(handoff).toEqual({ type: 'video', prompt: 'waves', videoRatio: undefined, videoDuration: undefined });

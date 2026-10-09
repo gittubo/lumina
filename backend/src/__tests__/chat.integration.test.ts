@@ -264,8 +264,18 @@ describe('POST /api/chat/conversations/:id/messages', () => {
     ]);
 
     expect(prisma.chatMessage.create).toHaveBeenCalledWith({
-      data: { conversationId: 'conv_1', role: 'assistant', text: 'Here is a prompt.', content: replyContent },
+      data: {
+        conversationId: 'conv_1',
+        role: 'assistant',
+        text: 'Here is a prompt.',
+        content: replyContent,
+        createdAt: expect.any(Date),
+      },
     });
+    // The assistant turn must sort after the user turn it answers.
+    const created = prisma.chatMessage.create.mock.calls.map(([{ data }]) => data).slice(-2);
+    expect(created.map((d) => d.role)).toEqual(['user', 'assistant']);
+    expect(created[1].createdAt.getTime()).toBeGreaterThan(created[0].createdAt.getTime());
   });
 
   it('titles a new conversation from its first message and includes project context', async () => {

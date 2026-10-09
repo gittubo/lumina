@@ -52,6 +52,12 @@ describe('renderInline', () => {
     expect(screen.getByText('16:9').tagName).toBe('CODE');
     expect(screen.getByText(/2 \* 3 = 6/)).toBeInTheDocument();
   });
+
+  it('leaves markers that do not form a pair on one line as typed', () => {
+    const { container } = render(<p>{renderInline('`a\nb` and **c\nd**')}</p>);
+    expect(container.querySelector('code, strong')).toBeNull();
+    expect(container.textContent).toBe('`a\nb` and **c\nd**');
+  });
 });
 
 describe('Use this prompt', () => {

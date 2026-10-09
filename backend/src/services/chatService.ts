@@ -114,7 +114,14 @@ class ChatService {
   async getConversation(id: string, userId: string): Promise<ConversationWithMessages | null> {
     const conversation = await prisma.conversation.findFirst({
       where: { id, userId },
-      include: { messages: { orderBy: { createdAt: 'asc' } } },
+      include: {
+        messages: {
+          orderBy: { createdAt: 'asc' },
+          // Skip `content` (raw API blocks, thinking included) — only the
+          // replay in sendMessage needs it.
+          select: { id: true, role: true, text: true, createdAt: true },
+        },
+      },
     });
     if (!conversation) return null;
     const { messages, ...rest } = conversation;
@@ -220,12 +227,19 @@ class ChatService {
     const isFirstMessage = conversation.messages.length === 0;
     const title = isFirstMessage ? makeTitle(text) : conversation.title;
 
+    // Both rows are written in one request, so @default(now()) would give
+    // them the same timestamp and leave their order (which history replay
+    // depends on) up to the database. Stamp them explicitly instead.
+    const userCreatedAt = new Date();
+    const assistantCreatedAt = new Date(userCreatedAt.getTime() + 1);
+
     const [userMessage, assistantMessage] = await prisma.$transaction([
-      prisma.chatMessage.create({ data: { conversationId, role: 'user', text } }),
+      prisma.chatMessage.create({ data: { conversationId, role: 'user', text, createdAt: userCreatedAt } }),
       prisma.chatMessage.create({
         data: {
           conversationId,
           role: 'assistant',
+          createdAt: assistantCreatedAt,
           text: replyText,
           content: response.content as unknown as Prisma.InputJsonValue,
         },
