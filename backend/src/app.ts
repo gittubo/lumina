@@ -11,6 +11,7 @@ dotenv.config();
 import authRoutes from './routes/authRoutes';
 import projectRoutes from './routes/projectRoutes';
 import generationRoutes from './routes/generationRoutes';
+import chatRoutes from './routes/chatRoutes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
 
@@ -35,7 +36,7 @@ app.use(
   })
 );
 
-// Middleware (applies to everything below, including auth/projects/generations)
+// Middleware (applies to everything below, including auth/projects/generations/chat)
 app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
@@ -54,6 +55,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/generations', generationRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

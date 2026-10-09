@@ -26,7 +26,7 @@ export const authMiddleware = async (
       email: payload.email,
     };
 
-    next();
+    return next();
   } catch (error: any) {
     return res.status(401).json({
       error: error.message || 'Authentication failed',

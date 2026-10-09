@@ -1,5 +1,13 @@
 import axios, { AxiosError } from 'axios';
-import type { AuthResponse, Project, Generation, ApiError } from '@/types';
+import type {
+  AuthResponse,
+  Project,
+  Generation,
+  ApiError,
+  Conversation,
+  ConversationWithMessages,
+  ChatMessage,
+} from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -10,25 +18,32 @@ export const api = axios.create({
   },
 });
 
+function getStoredToken(): string | null {
+  return typeof window !== 'undefined' ? localStorage.getItem('lumina_token') : null;
+}
+
+// Called on a 401: the token is invalid/expired, so clear it and let the UI
+// redirect to login.
+function clearStoredAuth() {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('lumina_token');
+    localStorage.removeItem('lumina_user');
+  }
+}
+
 // Attach the auth token to every request if we have one
 api.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('lumina_token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  const token = getStoredToken();
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// If the token is invalid/expired, clear it so the UI can redirect to login
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401 && typeof window !== 'undefined') {
-      localStorage.removeItem('lumina_token');
-      localStorage.removeItem('lumina_user');
-    }
+    if (error.response?.status === 401) clearStoredAuth();
     return Promise.reject(error);
   }
 );
@@ -138,4 +153,93 @@ export async function getGenerationStatus(id: string) {
 export async function listGenerationsByProject(projectId: string) {
   const { data } = await api.get<{ generations: Generation[] }>(`/generations/project/${projectId}`);
   return data.generations;
+}
+
+// ---- Lumina Assistant (chat) ----
+
+export async function listConversations() {
+  const { data } = await api.get<{ conversations: Conversation[] }>('/chat/conversations');
+  return data.conversations;
+}
+
+export async function getConversation(id: string) {
+  const { data } = await api.get<ConversationWithMessages>(`/chat/conversations/${id}`);
+  return data;
+}
+
+export async function createConversation(projectId?: string) {
+  const { data } = await api.post<Conversation>('/chat/conversations', projectId ? { projectId } : {});
+  return data;
+}
+
+export async function deleteConversation(id: string) {
+  await api.delete(`/chat/conversations/${id}`);
+}
+
+export interface ChatReply {
+  userMessage: ChatMessage;
+  assistantMessage: ChatMessage;
+  title: string;
+}
+
+export class ChatStreamError extends Error {}
+
+/**
+ * Sends a message and streams the reply. The endpoint answers with
+ * Server-Sent Events over a POST, which EventSource can't do (and axios
+ * can't stream in the browser), so this reads the body with fetch.
+ */
+export async function sendChatMessage(
+  conversationId: string,
+  message: string,
+  onDelta: (text: string) => void,
+  signal?: AbortSignal
+): Promise<ChatReply> {
+  const token = getStoredToken();
+  const response = await fetch(`${API_URL}/api/chat/conversations/${conversationId}/messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ message }),
+    signal,
+  });
+
+  if (!response.ok || !response.body) {
+    if (response.status === 401) clearStoredAuth();
+    const data = (await response.json().catch(() => null)) as ApiError | null;
+    throw new ChatStreamError(data?.error || 'Something went wrong');
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    let boundary: number;
+    while ((boundary = buffer.indexOf('\n\n')) !== -1) {
+      const raw = buffer.slice(0, boundary);
+      buffer = buffer.slice(boundary + 2);
+
+      let event = 'message';
+      let data = '';
+      for (const line of raw.split('\n')) {
+        if (line.startsWith('event: ')) event = line.slice(7);
+        else if (line.startsWith('data: ')) data += line.slice(6);
+      }
+      if (!data) continue;
+      const payload = JSON.parse(data);
+
+      if (event === 'delta') onDelta(payload.text);
+      else if (event === 'done') return payload as ChatReply;
+      else if (event === 'error') throw new ChatStreamError(payload.error || 'Something went wrong');
+    }
+  }
+
+  throw new ChatStreamError('The connection closed before the reply finished. Please try again.');
 }
