@@ -358,7 +358,8 @@ const cursor = (() => {
       rp.x += (pos.x - rp.x) * 0.16; rp.y += (pos.y - rp.y) * 0.16;
       dot.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
       ring.style.transform = `translate3d(${rp.x}px, ${rp.y}px, 0)`;
-      // verlet rope
+      // verlet rope (snap to the cursor after a teleport, e.g. a jump-link or re-entering the window)
+      if (Math.hypot(pts[0].x - pos.x, pts[0].y - pos.y) > 160) pts.forEach((p, i) => { p.x = p.px = pos.x; p.y = p.py = pos.y + i; });
       pts[0].x = pos.x; pts[0].y = pos.y;
       for (let i = 1; i < N; i++) {
         const p = pts[i], vx = (p.x - p.px) * 0.95, vy = (p.y - p.py) * 0.95;
@@ -418,6 +419,7 @@ const rulerNeedle = $('.ruler__needle'), rulerTrack = $('.ruler__track');
 const counter = $('.manifesto__counter b');
 let lastStitch = -1;
 gsap.ticker.add((time, deltaMs) => {
+  if (document.hidden) return;
   const dt = Math.min(deltaMs / 1000, 0.05);
   const max = document.documentElement.scrollHeight - innerHeight;
   const p = clamp(scrollY / Math.max(1, max));

@@ -290,7 +290,7 @@ section { position: relative; padding: 0 var(--gutter); }
 .measure__grid {
   display: grid; grid-template-columns: 1fr 1.1fr 0.9fr; gap: clamp(24px, 4vw, 72px); align-items: start;
 }
-.measure__film { margin: 0; position: relative; }
+.measure__film { margin: 0; position: sticky; top: 16vh; }
 .measure__film, .measure__photo { mix-blend-mode: multiply; }
 .measure__film video { width: 100%; aspect-ratio: 736 / 414; object-fit: cover; filter: saturate(.9) contrast(1.05); }
 .measure__photo { margin: 6vh 0 0; }
@@ -522,6 +522,7 @@ figcaption { margin-top: 12px; color: var(--muted); font-size: 10px; }
   .measure { padding-top: 16vh; }
   .measure__stage { height: 44vh; }
   .measure__grid { grid-template-columns: 1fr; }
+  .measure__film { position: relative; top: auto; }
   .measure__photo { max-width: none; }
 
   .cloth { height: auto; }
