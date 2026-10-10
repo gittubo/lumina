@@ -1,4 +1,4 @@
-# Tubo's Stich — a cinematic, scroll-told atelier
+# Tubo's Stitch — a cinematic, scroll-told atelier
 
 A concept website for a bespoke tailoring house. One golden thread runs through the whole page: it is threaded through a needle in the prologue, sews a running stitch under the manifesto, and is finally drawn into a heart at the end. The palette chapter lets visitors choose its colour.
 
@@ -7,7 +7,7 @@ A concept website for a bespoke tailoring house. One golden thread runs through 
 | # | Chapter | What happens |
 |---|---|---|
 | — | **Loader** | A needle is threaded while assets load, then the screen is cut open along a stitched seam. |
-| 00 | **Prologue** | A 3D steel needle and live thread loop through the "Tubo's Stich" title. |
+| 00 | **Prologue** | A 3D steel needle and live thread loop through the "Tubo's Stitch" title. |
 | I | **The Thread** | The manifesto lights up word by word while the needle sews a real running stitch across the screen (a hidden depth plane makes the thread dip "under the cloth"). |
 | II | **The Measure** | Background turns to bone paper. A 3D tailor's tape unrolls from its coil as you scroll, measurements count up, and the green tape film plays. |
 | III | **The Cloth** | A hanging WebGL drape with sheen and twill weave. It ripples under the cursor. Five swatches (wool, satin, linen, velvet, tweed) change the material live. |
@@ -23,7 +23,7 @@ The page shifts between ink and bone tones as you move through the chapters. Thr
 The site uses ES modules, so serve it over HTTP rather than opening the file directly:
 
 ```bash
-cd tubos-stich
+cd tubos-stitch
 npx serve .            # or: python3 -m http.server 8080
 ```
 

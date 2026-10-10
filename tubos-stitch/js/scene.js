@@ -1,5 +1,5 @@
 /* =========================================================
-   Tubo's Stich — WebGL atelier
+   Tubo's Stitch — WebGL atelier
    One fixed canvas. Each 3D "actor" is anchored to an empty
    DOM element ([data-anchor]) so it scrolls with the story.
    ========================================================= */
@@ -71,7 +71,7 @@ function tapeTex(cm = 80) {
     g.font = '500 30px "JetBrains Mono", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle';
     for (let c = 1; c < cm; c++) if (c < 3 || c > 4) g.fillText(String(c), c * pxPerCm, H / 2 + 2);
     g.fillStyle = '#d4a85a'; g.font = 'italic 34px "Instrument Serif", serif';
-    g.fillText("Tubo's Stich", 3.5 * pxPerCm, H / 2 + 2);
+    g.fillText("Tubo's Stitch", 3.5 * pxPerCm, H / 2 + 2);
   }, { repeat: [1, 1] });
 }
 

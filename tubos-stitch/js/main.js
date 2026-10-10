@@ -1,5 +1,5 @@
 /* =========================================================
-   Tubo's Stich — story director
+   Tubo's Stitch — story director
    ========================================================= */
 import { Atelier } from './scene.js';
 import { FrameSequence } from './sequence.js';
