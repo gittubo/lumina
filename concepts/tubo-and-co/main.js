@@ -70,7 +70,8 @@ const waitVideo = new Promise(res => {
   justiceVideo.addEventListener('canplay', res, { once: true });
   setTimeout(res, 4500);
 });
-const assetsReady = Promise.all([document.fonts ? document.fonts.ready : Promise.resolve(), hallReady, waitVideo]);
+const minHold = new Promise(res => gsap.delayedCall(reduced ? 0 : 2.1, res));
+const assetsReady = Promise.all([document.fonts ? document.fonts.ready : Promise.resolve(), hallReady, waitVideo, minHold]);
 
 gsap.to('.loader__mark span', { opacity: 1, y: 0, duration: 1, stagger: .06, ease: 'power3.out', delay: .15 });
 const fill = gsap.to(loader, {
