@@ -55,3 +55,13 @@ prefer reduced motion get a static, fully readable page with no pinning or smoot
 
 All copy lives in `index.html`. Firm details, matter names and figures are placeholders
 for the concept.
+
+## Walkthrough films
+
+`walkthrough/` holds three portfolio films (H.264, 30fps, about 1:48 each). They were
+recorded frame by frame in headless Chromium on a virtual clock, so the scroll, the 3D
+scenes and the videos stay perfectly smooth.
+
+- `tubo-and-co-desktop-walkthrough.mp4`: 1920×1080
+- `tubo-and-co-phone-walkthrough.mp4`: 1080×1920, vertical for Reels, Shorts and TikTok
+- `tubo-and-co-phone-showcase.mp4`: 1920×1080, the phone recording in a device frame on a branded background
