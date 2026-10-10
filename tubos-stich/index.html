@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tubo's Stich — Bespoke Tailoring</title>
+  <meta name="description" content="Tubo's Stich is a bespoke tailoring atelier. Every garment begins with a single thread — follow it from measure to final stitch." />
+  <meta name="theme-color" content="#0c0b0a" />
+  <meta property="og:title" content="Tubo's Stich — Tailored to the thread" />
+  <meta property="og:description" content="A cinematic, scroll-told journey through a bespoke tailoring atelier." />
+  <meta property="og:image" content="assets/img/og-frame.jpg" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c0b0a'/%3E%3Cpath d='M18 46 L46 18' stroke='%23d4a85a' stroke-width='3.5' stroke-linecap='round'/%3E%3Cellipse cx='43' cy='21' rx='2.2' ry='5' transform='rotate(45 43 21)' fill='none' stroke='%230c0b0a' stroke-width='1.6'/%3E%3Cpath d='M14 30c6-8 14 10 22 2' stroke='%23efe7da' stroke-width='2' fill='none' stroke-dasharray='3 3'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <link rel="preload" as="image" href="assets/seq/f001.webp" />
+
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.min.js" } }
+  </script>
+  <script src="vendor/gsap.min.js" defer></script>
+  <script src="vendor/ScrollTrigger.min.js" defer></script>
+  <script src="vendor/lenis.min.js" defer></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body class="is-loading">
+
+  <!-- ============ PRELOADER — threading the needle ============ -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__half loader__half--top"></div>
+    <div class="loader__half loader__half--bottom"></div>
+    <div class="loader__inner">
+      <svg class="loader__needle" viewBox="0 0 400 120" fill="none">
+        <defs>
+          <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f4f1ea" />
+            <stop offset=".5" stop-color="#9c978e" />
+            <stop offset="1" stop-color="#4a4741" />
+          </linearGradient>
+        </defs>
+        <path d="M30 60 L300 54 Q352 52 360 60 Q352 68 300 66 Z" fill="url(#steel)" />
+        <ellipse cx="322" cy="60" rx="20" ry="3.2" fill="#0c0b0a" />
+        <path class="loader__thread" d="M-20 92 C 60 120, 120 10, 200 70 S 300 64, 322 60 S 380 40, 420 30" stroke="#d4a85a" stroke-width="1.6" stroke-linecap="round" />
+      </svg>
+      <div class="loader__meta">
+        <span class="mono">Threading the needle</span>
+        <span class="loader__count mono"><span class="loader__num">000</span><small>cm</small></span>
+      </div>
+      <div class="loader__ruler"><span class="loader__ruler-fill"></span></div>
+    </div>
+  </div>
+
+  <!-- ============ GLOBAL LAYERS ============ -->
+  <canvas id="webgl" aria-hidden="true"></canvas>
+  <canvas id="cursor-thread" aria-hidden="true"></canvas>
+  <div class="cursor" aria-hidden="true">
+    <span class="cursor__ring"><span class="cursor__label"></span></span>
+    <span class="cursor__dot"></span>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <a href="#top" class="nav__logo" data-scroll-to="#top" aria-label="Tubo's Stich — back to top">
+      <svg viewBox="0 0 48 48" class="nav__mark" aria-hidden="true">
+        <circle cx="24" cy="24" r="22.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2.2 2.6" />
+        <text x="24" y="30.5" text-anchor="middle" font-family="Instrument Serif, serif" font-size="20" font-style="italic" fill="currentColor">TS</text>
+      </svg>
+      <span class="nav__word">Tubo's <em>Stich</em></span>
+    </a>
+    <div class="nav__chapter mono" aria-live="polite">
+      <span class="nav__chapter-num">00</span>
+      <span class="nav__chapter-sep"></span>
+      <span class="nav__chapter-name">Prologue</span>
+    </div>
+    <div class="nav__actions">
+      <button class="nav__sound mono" type="button" aria-pressed="false" data-cursor="Sound">
+        <span class="nav__sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="nav__sound-label">Sound off</span>
+      </button>
+      <a href="#book" class="btn btn--pill" data-scroll-to="#book" data-cursor="Book">Book a fitting</a>
+    </div>
+  </header>
+
+  <!-- ============ SIDE RULER (progress) ============ -->
+  <nav class="ruler" aria-label="Chapters">
+    <div class="ruler__track">
+      <div class="ruler__ticks"></div>
+      <div class="ruler__needle"><span></span></div>
+    </div>
+    <ol class="ruler__chapters mono">
+      <li><a href="#top" data-scroll-to="#top">00</a></li>
+      <li><a href="#thread" data-scroll-to="#thread">I</a></li>
+      <li><a href="#measure" data-scroll-to="#measure">II</a></li>
+      <li><a href="#cloth" data-scroll-to="#cloth">III</a></li>
+      <li><a href="#making" data-scroll-to="#making">IV</a></li>
+      <li><a href="#palette" data-scroll-to="#palette">V</a></li>
+      <li><a href="#fitting" data-scroll-to="#fitting">VI</a></li>
+      <li><a href="#book" data-scroll-to="#book">VII</a></li>
+    </ol>
+  </nav>
+
+  <main id="top">
+
+    <!-- ===================== PROLOGUE / HERO ===================== -->
+    <section class="hero" data-theme="ink" data-chapter="00|Prologue" id="hero">
+      <div class="hero__stage" data-anchor="hero"></div>
+      <div class="hero__top mono">
+        <span>Bespoke tailoring atelier</span>
+        <span>Est. by hand — measured by eye</span>
+      </div>
+      <h1 class="hero__title" aria-label="Tubo's Stich">
+        <span class="hero__line"><span class="split" data-split>Tubo's</span></span>
+        <span class="hero__line hero__line--2"><em class="split" data-split>Stich</em></span>
+      </h1>
+      <div class="hero__bottom">
+        <p class="hero__lede reveal">Clothes cut for one body, sewn for one life. <br class="hide-sm" />Every garment begins with a single thread — follow it.</p>
+        <div class="hero__scroll mono">
+          <span>Scroll to begin the fitting</span>
+          <svg viewBox="0 0 16 80" class="hero__stitch" aria-hidden="true"><path d="M8 0 V80" /></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CH. I — THE THREAD ===================== -->
+    <section class="manifesto" data-theme="ink" data-chapter="I|The Thread" id="thread">
+      <div class="manifesto__pin">
+        <div class="manifesto__stage" data-anchor="manifesto"></div>
+        <div class="chapter-tag mono"><span>Chapter I</span><i></i><span>The Thread</span></div>
+        <p class="manifesto__text" data-words>
+          We don't make clothes for a size. We make them for a person — the slope of a shoulder, the way you stand when nobody is watching, the arm you reach with first. One thread, followed with patience, until it fits like it was always yours.
+        </p>
+        <div class="manifesto__foot mono">
+          <span class="manifesto__counter"><b>0000</b> stitches sewn</span>
+          <span>12 stitches to the inch · hand-finished</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- tape-measure band -->
+    <div class="tape-band" aria-hidden="true">
+      <div class="tape-band__strip">
+        <div class="tape-band__track">
+          <span>Bespoke</span><b>✂</b><span>Made to measure</span><b>✂</b><span>Bridal &amp; occasion</span><b>✂</b><span>Alterations</span><b>✂</b><span>Hand-finished</span><b>✂</b>
+          <span>Bespoke</span><b>✂</b><span>Made to measure</span><b>✂</b><span>Bridal &amp; occasion</span><b>✂</b><span>Alterations</span><b>✂</b><span>Hand-finished</span><b>✂</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== CH. II — THE MEASURE ===================== -->
+    <section class="measure" data-theme="bone" data-chapter="II|The Measure" id="measure">
+      <div class="measure__head">
+        <div class="chapter-tag mono"><span>Chapter II</span><i></i><span>The Measure</span></div>
+        <h2 class="display">
+          <span class="line"><span>Twenty-seven</span></span>
+          <span class="line"><span><em>measurements.</em></span></span>
+          <span class="line"><span>Then we take</span></span>
+          <span class="line"><span>them again.</span></span>
+        </h2>
+      </div>
+
+      <div class="measure__stage" data-anchor="tape"></div>
+
+      <div class="measure__grid">
+        <figure class="measure__film reveal-card" data-cursor="Watch">
+          <video src="assets/video/tape.mp4" poster="assets/video/tape-poster.jpg" muted loop playsinline preload="metadata" data-autoplay></video>
+          <figcaption class="mono">Fig. 02 — The tape never lies</figcaption>
+        </figure>
+
+        <div class="measure__copy">
+          <p class="body-lg reveal">A tape measure is the most honest tool in the atelier. We read it slowly, write everything down, and trust nothing we haven't checked twice. Your posture, your habits, the watch on your left wrist — it all goes into the pattern.</p>
+          <ul class="measure__list mono" aria-label="Sample measurement card">
+            <li><span>Chest</span><i></i><b data-count="102.5">0</b><small>cm</small></li>
+            <li><span>Waist</span><i></i><b data-count="86">0</b><small>cm</small></li>
+            <li><span>Shoulder</span><i></i><b data-count="46.5">0</b><small>cm</small></li>
+            <li><span>Sleeve</span><i></i><b data-count="64">0</b><small>cm</small></li>
+            <li><span>Back length</span><i></i><b data-count="76">0</b><small>cm</small></li>
+            <li><span>Inseam</span><i></i><b data-count="81.5">0</b><small>cm</small></li>
+          </ul>
+        </div>
+
+        <figure class="measure__photo reveal-card">
+          <img src="assets/img/tape-measure.webp" alt="A black tailor's tape measure, coiled" loading="lazy" width="736" height="736" />
+          <figcaption class="mono">Fig. 03 — 200 cm of truth</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===================== CH. III — THE CLOTH ===================== -->
+    <section class="cloth" data-theme="ink" data-chapter="III|The Cloth" id="cloth">
+      <div class="cloth__pin">
+        <div class="cloth__stage" data-anchor="cloth" data-cursor="Touch"></div>
+        <div class="cloth__copy">
+          <div class="chapter-tag mono"><span>Chapter III</span><i></i><span>The Cloth</span></div>
+          <h2 class="display display--md">
+            <span class="line"><span>Choose the cloth</span></span>
+            <span class="line"><span><em>that chooses you.</em></span></span>
+          </h2>
+          <p class="body reveal">Run your cursor across the drape. Every bolt in the atelier is picked for how it moves, how it breathes, and how it will age with you.</p>
+
+          <div class="swatches" role="radiogroup" aria-label="Fabric">
+            <button class="swatch is-active" role="radio" aria-checked="true" data-fabric="0" style="--c:#1b2233" data-cursor="Select"><i></i><span>Midnight Wool</span></button>
+            <button class="swatch" role="radio" aria-checked="false" data-fabric="1" style="--c:#6f8590" data-cursor="Select"><i></i><span>Storm Satin</span></button>
+            <button class="swatch" role="radio" aria-checked="false" data-fabric="2" style="--c:#e6dccb" data-cursor="Select"><i></i><span>Ivory Linen</span></button>
+            <button class="swatch" role="radio" aria-checked="false" data-fabric="3" style="--c:#6d1622" data-cursor="Select"><i></i><span>Ember Velvet</span></button>
+            <button class="swatch" role="radio" aria-checked="false" data-fabric="4" style="--c:#4a4f36" data-cursor="Select"><i></i><span>Olive Tweed</span></button>
+          </div>
+
+          <dl class="fabric-spec mono">
+            <div><dt>Cloth</dt><dd data-spec="name">Midnight Wool</dd></div>
+            <div><dt>Weight</dt><dd data-spec="weight">260 g/m²</dd></div>
+            <div><dt>Weave</dt><dd data-spec="weave">Twill, Super 120s</dd></div>
+            <div><dt>Best for</dt><dd data-spec="use">Suits · Overcoats</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CH. IV — THE MAKING (scroll film) ===================== -->
+    <section class="making" data-theme="ink" data-chapter="IV|The Making" id="making">
+      <div class="making__pin">
+        <canvas class="making__bg" aria-hidden="true"></canvas>
+        <div class="making__shade" aria-hidden="true"></div>
+
+        <div class="making__beats">
+          <div class="chapter-tag mono"><span>Chapter IV</span><i></i><span>The Making</span></div>
+          <div class="beat is-active" data-beat="0">
+            <span class="beat__num mono">01 / 06</span>
+            <h3 class="beat__title">Listen with <em>your hands.</em></h3>
+            <p class="beat__body">Before the first cut we read the cloth by touch — its grain, its weight, its stubborn edges.</p>
+          </div>
+          <div class="beat" data-beat="1">
+            <span class="beat__num mono">02 / 06</span>
+            <h3 class="beat__title">Shears that only <em>touch cloth.</em></h3>
+            <p class="beat__body">One pair, sharpened by hand, never used for paper. The line is chalked once and cut once.</p>
+          </div>
+          <div class="beat" data-beat="2">
+            <span class="beat__num mono">03 / 06</span>
+            <h3 class="beat__title">Pin by pin, <em>a shape appears.</em></h3>
+            <p class="beat__body">The pattern is pinned to the cloth and then to you — adjusted on the body, not on paper.</p>
+          </div>
+          <div class="beat" data-beat="3">
+            <span class="beat__num mono">04 / 06</span>
+            <h3 class="beat__title">Thread, chosen <em>like a word.</em></h3>
+            <p class="beat__body">Matched to the cloth in daylight. Strong enough to hold, quiet enough to disappear.</p>
+          </div>
+          <div class="beat" data-beat="4">
+            <span class="beat__num mono">05 / 06</span>
+            <h3 class="beat__title">Tension, <em>set by ear.</em></h3>
+            <p class="beat__body">Every machine has a voice. When the tension is right, it hums instead of chatters.</p>
+          </div>
+          <div class="beat" data-beat="5">
+            <span class="beat__num mono">06 / 06</span>
+            <h3 class="beat__title">Then — <em>stitch.</em></h3>
+            <p class="beat__body">Twelve to the inch on the seams, by hand on the lapels and buttonholes. Slow on purpose.</p>
+          </div>
+        </div>
+
+        <div class="making__frame">
+          <canvas class="making__canvas" aria-label="Film: the making of a garment, scrubbed by scroll"></canvas>
+          <div class="hud mono" aria-hidden="true">
+            <span class="hud__rec"><i></i>REC</span>
+            <span class="hud__tc">00:00:00:00</span>
+            <span class="hud__lens">50mm · f/1.8 · ISO 800</span>
+            <span class="hud__frame">FR <b>001</b>/240</span>
+            <span class="hud__corner hud__corner--tl"></span><span class="hud__corner hud__corner--tr"></span>
+            <span class="hud__corner hud__corner--bl"></span><span class="hud__corner hud__corner--br"></span>
+          </div>
+        </div>
+
+        <div class="making__timeline" aria-hidden="true">
+          <div class="making__timeline-line"><span></span></div>
+          <ol class="mono">
+            <li>Feel</li><li>Cut</li><li>Pin</li><li>Thread</li><li>Set</li><li>Stitch</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CH. V — THE PALETTE ===================== -->
+    <section class="palette" data-theme="ink" data-chapter="V|The Palette" id="palette">
+      <div class="palette__head">
+        <div class="chapter-tag mono"><span>Chapter V</span><i></i><span>The Palette</span></div>
+        <h2 class="display display--md">
+          <span class="line"><span>Pick the thread that</span></span>
+          <span class="line"><span><em>runs through your story.</em></span></span>
+        </h2>
+      </div>
+
+      <div class="palette__grid">
+        <figure class="palette__film reveal-card">
+          <video src="assets/video/threads.mp4" poster="assets/video/threads-poster.jpg" muted loop playsinline preload="metadata" data-autoplay></video>
+          <figcaption class="mono">Fig. 05 — Cones at rest, studio wall</figcaption>
+        </figure>
+
+        <div class="palette__stage" data-anchor="spools"></div>
+
+        <div class="palette__list">
+          <p class="body reveal">Hover a colour to try it on. Click to keep it — your thread will follow you to the end of the story.</p>
+          <ul class="threads" role="listbox" aria-label="Thread colour">
+            <li role="option" tabindex="0" data-thread="0" style="--t:#d4a85a" data-cursor="Choose"><i></i><span>Brass</span><small class="mono">No. 01</small></li>
+            <li role="option" tabindex="0" data-thread="1" style="--t:#e8541f" data-cursor="Choose"><i></i><span>Vermilion</span><small class="mono">No. 07</small></li>
+            <li role="option" tabindex="0" data-thread="2" style="--t:#e9a227" data-cursor="Choose"><i></i><span>Saffron</span><small class="mono">No. 12</small></li>
+            <li role="option" tabindex="0" data-thread="3" style="--t:#e9b7bf" data-cursor="Choose"><i></i><span>Blush</span><small class="mono">No. 19</small></li>
+            <li role="option" tabindex="0" data-thread="4" style="--t:#8ccbe0" data-cursor="Choose"><i></i><span>Powder Blue</span><small class="mono">No. 23</small></li>
+            <li role="option" tabindex="0" data-thread="5" style="--t:#2b3fb8" data-cursor="Choose"><i></i><span>Ultramarine</span><small class="mono">No. 31</small></li>
+            <li role="option" tabindex="0" data-thread="6" style="--t:#b2654a" data-cursor="Choose"><i></i><span>Clay</span><small class="mono">No. 38</small></li>
+            <li role="option" tabindex="0" data-thread="7" style="--t:#2f3d33" data-cursor="Choose"><i></i><span>Bottle Green</span><small class="mono">No. 44</small></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CH. VI — THE FITTING ===================== -->
+    <section class="fitting" data-theme="bone" data-chapter="VI|The Fitting" id="fitting">
+      <div class="fitting__intro">
+        <div class="chapter-tag mono"><span>Chapter VI</span><i></i><span>The Fitting</span></div>
+        <h2 class="display">
+          <span class="line"><span>Fitted on you,</span></span>
+          <span class="line"><span><em>not on a size.</em></span></span>
+        </h2>
+      </div>
+
+      <div class="fitting__grid">
+        <figure class="fitting__figure">
+          <div class="fitting__img">
+            <img src="assets/img/mannequin.webp" alt="A mannequin draped in storm-grey satin with a yellow tape measure over the shoulders" loading="lazy" width="417" height="626" />
+            <svg class="fitting__lines" viewBox="0 0 417 626" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M150 112 C 120 70, 60 70, -60 60" />
+              <path d="M262 300 C 330 290, 380 250, 480 240" />
+              <path d="M140 520 C 110 560, 40 580, -60 590" />
+            </svg>
+          </div>
+          <div class="pin pin--1" data-cursor="Detail"><b>01</b><span><strong>Shoulder</strong>Hand-padded, shaped to your slope</span></div>
+          <div class="pin pin--2" data-cursor="Detail"><b>02</b><span><strong>Drape</strong>Bias-cut satin, falls without pulling</span></div>
+          <div class="pin pin--3" data-cursor="Detail"><b>03</b><span><strong>Hem</strong>Blind-stitched, invisible from both sides</span></div>
+        </figure>
+
+        <div class="fitting__services">
+          <ol class="services">
+            <li class="service">
+              <span class="service__num mono">01</span>
+              <div><h3>Bespoke</h3><p>Your own pattern, drafted from scratch. Three fittings, built entirely around you.</p></div>
+              <span class="service__time mono">8–10 wks</span>
+            </li>
+            <li class="service">
+              <span class="service__num mono">02</span>
+              <div><h3>Made to measure</h3><p>A refined house block adjusted to your measurements and your choice of cloth.</p></div>
+              <span class="service__time mono">4–6 wks</span>
+            </li>
+            <li class="service">
+              <span class="service__num mono">03</span>
+              <div><h3>Bridal &amp; occasion</h3><p>Gowns, suits and traditional wear for the days you'll look back on. Fitted down to the hour.</p></div>
+              <span class="service__time mono">6–12 wks</span>
+            </li>
+            <li class="service">
+              <span class="service__num mono">04</span>
+              <div><h3>Alterations &amp; repair</h3><p>Give the clothes you love a second life. Re-cut, re-lined, re-stitched.</p></div>
+              <span class="service__time mono">3–10 days</span>
+            </li>
+          </ol>
+
+          <div class="process">
+            <p class="mono process__label">The process</p>
+            <ol class="process__steps mono">
+              <li><span>Consult</span></li>
+              <li><span>Measure</span></li>
+              <li><span>Baste fitting</span></li>
+              <li><span>Final fitting</span></li>
+              <li><span>Collect</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FINALE ===================== -->
+    <section class="finale" data-theme="ink" data-chapter="VII|The Knot" id="finale">
+      <div class="finale__copy">
+        <div class="finale__stage" data-anchor="heart"></div>
+        <p class="mono finale__kicker">Sewn with love — knotted by hand</p>
+        <h2 class="display display--xl">
+          <span class="line"><span>Let's make</span></span>
+          <span class="line"><span><em>something that fits.</em></span></span>
+        </h2>
+      </div>
+    </section>
+
+    <section class="book" data-theme="ink" data-chapter="VII|The Knot" id="book">
+      <div class="book__grid">
+        <div class="book__intro">
+          <div class="chapter-tag mono"><span>Chapter VII</span><i></i><span>Your Fitting</span></div>
+          <p class="body-lg">Tell us a little about what you have in mind. We'll reply within two working days to arrange your first consultation — in the atelier or at your door.</p>
+          <div class="book__thread mono">Your thread: <span class="book__thread-swatch"></span><b class="book__thread-name">Brass</b></div>
+        </div>
+
+        <form class="form" novalidate>
+          <div class="form__row">
+            <label class="field">
+              <span class="field__label mono">Your name</span>
+              <input type="text" name="name" autocomplete="name" required placeholder="Your full name" />
+            </label>
+            <label class="field">
+              <span class="field__label mono">Email</span>
+              <input type="email" name="email" autocomplete="email" required placeholder="you@example.com" />
+            </label>
+          </div>
+
+          <fieldset class="field">
+            <legend class="field__label mono">What are we making?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="garment" value="Suit" checked /><span>Suit</span></label>
+              <label class="chip"><input type="radio" name="garment" value="Dress" /><span>Dress</span></label>
+              <label class="chip"><input type="radio" name="garment" value="Shirt" /><span>Shirt</span></label>
+              <label class="chip"><input type="radio" name="garment" value="Bridal" /><span>Bridal</span></label>
+              <label class="chip"><input type="radio" name="garment" value="Traditional" /><span>Traditional</span></label>
+              <label class="chip"><input type="radio" name="garment" value="Alteration" /><span>Alteration</span></label>
+            </div>
+          </fieldset>
+
+          <label class="field">
+            <span class="field__label mono">Anything we should know?</span>
+            <textarea name="notes" rows="3" placeholder="The occasion, the date, the feeling you're after…"></textarea>
+          </label>
+
+          <button type="submit" class="btn btn--big" data-cursor="Send">
+            <span>Request a fitting</span>
+            <svg viewBox="0 0 60 12" aria-hidden="true"><path d="M0 6 H56 M50 1 L57 6 L50 11" /></svg>
+          </button>
+
+          <div class="form__done" role="status" aria-live="polite">
+            <p class="display display--sm"><em>Thank you.</em> Your thread is on the spool.</p>
+            <p class="mono">We'll be in touch within two working days.</p>
+          </div>
+        </form>
+      </div>
+
+      <footer class="footer mono">
+        <span>© 2026 Tubo's Stich</span>
+        <span>Bespoke · Made to measure · Alterations</span>
+        <span>A portfolio concept — made with <i class="footer__heart">♥</i> &amp; thread</span>
+      </footer>
+    </section>
+  </main>
+
+  <audio class="soundtrack" src="assets/audio/atelier.m4a" loop preload="none"></audio>
+  <noscript><style>.loader{display:none}body.is-loading{overflow:auto}</style></noscript>
+</body>
+</html>
