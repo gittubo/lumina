@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tubo Shot This — Videography &amp; Photography</title>
+  <meta name="description" content="Tubo Shot This is a videography and photography studio. Campaigns, editorials, music videos and stories shot with intention." />
+  <meta name="theme-color" content="#07090b" />
+  <meta property="og:title" content="Tubo Shot This" />
+  <meta property="og:description" content="Videography &amp; Photography. Every story begins with a single frame." />
+  <meta property="og:image" content="assets/lens-end.webp" />
+  <link rel="preload" href="assets/sequence/001.webp" as="image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="is-loading">
+  <!-- Grain + vignette sit above everything for the filmic texture -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Preloader -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__reticle">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="loader__meta">
+      <span class="rec"><i></i>REC</span>
+      <span class="loader__label">Calibrating lens</span>
+      <span class="loader__count"><b data-count>000</b>%</span>
+    </div>
+    <div class="loader__bar"><i data-bar></i></div>
+  </div>
+
+  <!-- Custom focus cursor (desktop) -->
+  <div class="cursor" aria-hidden="true"><span></span></div>
+  <div class="cursor-label" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <a href="#top" class="nav__mark" aria-label="Tubo Shot This home">
+      <span class="nav__dot"></span>TUBO&nbsp;SHOT&nbsp;THIS
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#stills">Stills</a>
+      <a href="#motion">Motion</a>
+      <a href="#process">Process</a>
+      <a href="#services">Services</a>
+    </nav>
+    <a href="#contact" class="nav__cta" data-cursor="Book">Book a shoot</a>
+  </header>
+
+  <!-- Chapter rail -->
+  <aside class="rail" aria-hidden="true">
+    <ol>
+      <li data-rail="top"><span>00</span>Focus</li>
+      <li data-rail="eye"><span>01</span>The Eye</li>
+      <li data-rail="stills"><span>02</span>Stills</li>
+      <li data-rail="motion"><span>03</span>Motion</li>
+      <li data-rail="process"><span>04</span>Process</li>
+      <li data-rail="services"><span>05</span>Services</li>
+      <li data-rail="contact"><span>06</span>Contact</li>
+    </ol>
+  </aside>
+
+  <main>
+    <!-- ============ 00 · HERO: scroll-scrubbed lens film ============ -->
+    <section class="hero" id="top" data-chapter="top">
+      <div class="hero__stage">
+        <canvas class="hero__canvas" aria-label="A camera lens rotating and zooming in, ending on the lens glass"></canvas>
+        <div class="hero__vignette"></div>
+
+        <div class="letterbox letterbox--top"></div>
+        <div class="letterbox letterbox--bottom"></div>
+
+        <!-- Viewfinder HUD -->
+        <div class="hud" aria-hidden="true">
+          <div class="hud__corner hud__corner--tl"></div>
+          <div class="hud__corner hud__corner--tr"></div>
+          <div class="hud__corner hud__corner--bl"></div>
+          <div class="hud__corner hud__corner--br"></div>
+          <div class="hud__row hud__row--top">
+            <span class="rec"><i></i>REC</span>
+            <span data-tc>00:00:00:00</span>
+            <span>4K · 24P</span>
+          </div>
+          <div class="hud__row hud__row--bottom">
+            <span>ISO <b data-iso>400</b></span>
+            <span>ƒ/<b data-fstop>2.8</b></span>
+            <span>1/<b>50</b></span>
+            <span class="hud__focus">FOCUS <b data-focus>∞</b></span>
+          </div>
+        </div>
+
+        <!-- Story captions over the scrub -->
+        <div class="captions">
+          <p class="caption" data-caption="1"><span class="caption__k">Scene 01</span>Every story begins<br/>with a single frame.</p>
+          <p class="caption" data-caption="2"><span class="caption__k">Scene 02</span>We chase the light.</p>
+          <p class="caption" data-caption="3"><span class="caption__k">Scene 03</span>We find the angle<br/>no one else saw.</p>
+          <p class="caption" data-caption="4"><span class="caption__k">Scene 04</span>Then — we focus.</p>
+        </div>
+
+        <!-- Brand revealed on the lens glass -->
+        <div class="brand" aria-hidden="true">
+          <div class="brand__ring"></div>
+          <div class="brand__lock">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="brand__glint"></div>
+          <div class="brand__title">
+            <span class="brand__line" data-split>TUBO</span>
+            <span class="brand__line" data-split>SHOT THIS</span>
+          </div>
+          <p class="brand__sub">Videography <i></i> Photography</p>
+        </div>
+        <h1 class="sr-only">Tubo Shot This — Videography &amp; Photography</h1>
+
+        <div class="scroll-cue" data-cue>
+          <span>Scroll to focus</span>
+          <i></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 01 · THE EYE: manifesto ============ -->
+    <section class="chapter eye" id="eye" data-chapter="eye">
+      <header class="chapter__head">
+        <span class="chapter__num">01</span>
+        <span class="chapter__name">The Eye</span>
+      </header>
+      <p class="manifesto" data-words>
+        Tubo Shot This is a videography &amp; photography studio built on one belief —
+        a frame should feel like a memory <em>before</em> it becomes one.
+        We light it, we wait for it, and when it arrives, we don’t miss.
+      </p>
+      <div class="eye__stats">
+        <div><b data-counter="13">0</b><span>Frames in this reel</span></div>
+        <div><b>24</b><span>Frames per second, by choice</span></div>
+        <div><b>1</b><span>Shot that matters</span></div>
+      </div>
+    </section>
+
+    <!-- ============ 02 · STILLS: horizontal film strip ============ -->
+    <section class="stills" id="stills" data-chapter="stills">
+      <div class="stills__pin">
+        <header class="chapter__head chapter__head--abs">
+          <span class="chapter__num">02</span>
+          <span class="chapter__name">Stills</span>
+        </header>
+        <div class="stills__intro">
+          <h2 class="display">Stills<br/><span>that move.</span></h2>
+          <p>A contact sheet from the studio floor — campaigns, portraits and the quiet moments between takes.</p>
+        </div>
+        <div class="stills__track">
+          <figure class="frame" data-cursor="View"><div class="frame__img"><img src="assets/photos/studio-crew.webp" alt="Film crew lighting a seated subject in a white studio" loading="lazy" /></div><figcaption><span>F/01</span>The Crew</figcaption></figure>
+          <figure class="frame frame--tall" data-cursor="View"><div class="frame__img"><img src="assets/photos/nuda-campaign.webp" alt="Campaign image of three models displayed on a tethered monitor" loading="lazy" /></div><figcaption><span>F/02</span>Nuda — Campaign</figcaption></figure>
+          <figure class="frame" data-cursor="View"><div class="frame__img"><img src="assets/photos/camera-back.webp" alt="Hand holding a Canon camera showing a portrait on its screen" loading="lazy" /></div><figcaption><span>F/03</span>Proof of Light</figcaption></figure>
+          <figure class="frame frame--tall" data-cursor="View"><div class="frame__img"><img src="assets/photos/michiko-store.webp" alt="Laptop with a contact sheet next to a camera, in black and white" loading="lazy" /></div><figcaption><span>F/04</span>Michiko Store</figcaption></figure>
+          <figure class="frame" data-cursor="View"><div class="frame__img"><img src="assets/photos/slate-portrait.webp" alt="Model holding a clapperboard reading Sophia Mae in front of her face" loading="lazy" /></div><figcaption><span>F/05</span>Take One</figcaption></figure>
+          <figure class="frame" data-cursor="View"><div class="frame__img"><img src="assets/photos/viewfinder.webp" alt="Camera screen framing a model standing in a white studio" loading="lazy" /></div><figcaption><span>F/06</span>Through the Finder</figcaption></figure>
+          <figure class="frame frame--tall" data-cursor="View"><div class="frame__img"><img src="assets/photos/retouch-desk.webp" alt="Retouching station with a portrait on two screens" loading="lazy" /></div><figcaption><span>F/07</span>The Grade</figcaption></figure>
+          <figure class="frame" data-cursor="View"><div class="frame__img"><img src="assets/photos/tethered-set.webp" alt="Photographer kneeling while shooting tethered to a laptop" loading="lazy" /></div><figcaption><span>F/08</span>Tethered</figcaption></figure>
+          <figure class="frame" data-cursor="View"><div class="frame__img"><img src="assets/photos/empty-cyc.webp" alt="Empty white cyclorama with a wooden stool and two softboxes" loading="lazy" /></div><figcaption><span>F/09</span>Before Action</figcaption></figure>
+          <div class="stills__end">
+            <span>13 frames</span>
+            <p>Every one of them<br/>shot on purpose.</p>
+          </div>
+        </div>
+        <div class="stills__progress"><i data-stills-bar></i></div>
+      </div>
+    </section>
+
+    <!-- ============ 03 · MOTION: aperture opens onto film ============ -->
+    <section class="motion" id="motion" data-chapter="motion">
+      <div class="motion__pin">
+        <header class="chapter__head chapter__head--abs">
+          <span class="chapter__num">03</span>
+          <span class="chapter__name">Motion</span>
+        </header>
+        <div class="motion__aperture">
+          <video class="motion__video" src="assets/video/gimbal-rig.mp4" poster="assets/video/gimbal-rig.jpg" muted loop playsinline preload="metadata"></video>
+        </div>
+        <div class="motion__title">
+          <h2 class="display"><span data-line>Light,</span><span data-line>in motion.</span></h2>
+        </div>
+        <p class="motion__note">Music videos · Brand films · Fashion films · Events</p>
+      </div>
+      <div class="motion__duo">
+        <div class="motion__copy">
+          <span class="kicker">On the floor</span>
+          <h3>We build the room<br/>before we roll.</h3>
+          <p>Softboxes, rails, a gimbal that never sleeps. Every set is designed around the one moment your story needs — then we shoot it from every angle that matters.</p>
+        </div>
+        <div class="motion__clip" data-cursor="Play">
+          <video src="assets/video/studio-light.mp4" poster="assets/video/studio-light.jpg" muted loop playsinline preload="metadata"></video>
+          <span class="motion__tag"><span class="rec"><i></i>REC</span> Studio · Day</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 · PROCESS: behind the lens ============ -->
+    <section class="chapter process" id="process" data-chapter="process">
+      <header class="chapter__head">
+        <span class="chapter__num">04</span>
+        <span class="chapter__name">Behind the Lens</span>
+      </header>
+      <div class="process__grid">
+        <div class="process__collage">
+          <figure class="pc pc--a" data-speed="-0.12"><img src="assets/photos/backstage.webp" alt="Backstage setup with a monitor showing a fashion image" loading="lazy" /></figure>
+          <figure class="pc pc--b" data-speed="0.18"><img src="assets/photos/behind-the-scenes.webp" alt="Camera on a tripod framing a model" loading="lazy" /></figure>
+          <figure class="pc pc--c" data-speed="0.32"><img src="assets/photos/directors-chair.webp" alt="Director's chair with a clapperboard" loading="lazy" /></figure>
+        </div>
+        <ol class="process__steps">
+          <li data-reveal><span>01</span><h3>Pre-production</h3><p>Moodboards, locations, call sheets, casting. The film is made here — we just haven’t pressed record yet.</p></li>
+          <li data-reveal><span>02</span><h3>Shoot day</h3><p>Lean crew, cinema glass, tethered review. You see the frames as they happen.</p></li>
+          <li data-reveal><span>03</span><h3>Edit &amp; colour</h3><p>Rhythm, sound and a grade built for your brand — not a preset.</p></li>
+          <li data-reveal><span>04</span><h3>Delivery</h3><p>Masters, cut-downs and stills sized for every screen they’ll live on.</p></li>
+        </ol>
+      </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track">
+          <span>Campaigns</span><i>✦</i><span>Editorial</span><i>✦</i><span>Music Videos</span><i>✦</i><span>Portraits</span><i>✦</i><span>Brand Films</span><i>✦</i><span>Events</span><i>✦</i>
+          <span>Campaigns</span><i>✦</i><span>Editorial</span><i>✦</i><span>Music Videos</span><i>✦</i><span>Portraits</span><i>✦</i><span>Brand Films</span><i>✦</i><span>Events</span><i>✦</i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 05 · SERVICES ============ -->
+    <section class="chapter services" id="services" data-chapter="services">
+      <header class="chapter__head">
+        <span class="chapter__num">05</span>
+        <span class="chapter__name">Services</span>
+      </header>
+      <ul class="services__list">
+        <li class="svc" data-img="assets/photos/nuda-campaign.webp"><span class="svc__n">01</span><h3>Brand Campaigns</h3><p>Stills + motion</p></li>
+        <li class="svc" data-img="assets/photos/slate-portrait.webp"><span class="svc__n">02</span><h3>Editorial &amp; Portrait</h3><p>Studio · Location</p></li>
+        <li class="svc" data-img="assets/photos/studio-crew.webp"><span class="svc__n">03</span><h3>Music Videos &amp; Film</h3><p>Concept to grade</p></li>
+        <li class="svc" data-img="assets/photos/on-set.webp"><span class="svc__n">04</span><h3>Events &amp; Live</h3><p>Coverage · Recaps</p></li>
+        <li class="svc" data-img="assets/photos/michiko-store.webp"><span class="svc__n">05</span><h3>Product &amp; E-commerce</h3><p>Clean · Consistent</p></li>
+        <li class="svc" data-img="assets/photos/retouch-desk.webp"><span class="svc__n">06</span><h3>Social Content</h3><p>Vertical-first</p></li>
+      </ul>
+      <div class="svc-preview" aria-hidden="true"><img alt="" /></div>
+    </section>
+
+    <!-- ============ 06 · CONTACT: closing shot ============ -->
+    <section class="contact" id="contact" data-chapter="contact">
+      <div class="contact__lens" aria-hidden="true">
+        <svg viewBox="0 0 200 200" class="contact__orbit">
+          <defs><path id="orbit" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0" /></defs>
+          <text><textPath href="#orbit">TUBO SHOT THIS • VIDEOGRAPHY • PHOTOGRAPHY • TUBO SHOT THIS • VIDEOGRAPHY • PHOTOGRAPHY •</textPath></text>
+        </svg>
+        <div class="contact__glass"></div>
+      </div>
+      <span class="kicker">06 — Final scene</span>
+      <h2 class="contact__title display"><span data-line>Let’s make</span><span data-line>something</span><span data-line>worth watching.</span></h2>
+      <!-- TODO: replace the placeholder address and social handle with the real ones -->
+      <a class="contact__mail" href="mailto:hello@tuboshotthis.com" data-cursor="Write">hello@tuboshotthis.com</a>
+      <div class="contact__links">
+        <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://vimeo.com/" target="_blank" rel="noopener">Vimeo</a>
+        <a href="https://www.tiktok.com/" target="_blank" rel="noopener">TikTok</a>
+      </div>
+      <footer class="footer">
+        <span>© <span data-year>2026</span> Tubo Shot This</span>
+        <span>Videography &amp; Photography</span>
+        <a href="#top">Back to the lens ↑</a>
+      </footer>
+    </section>
+  </main>
+
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/vendor/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
