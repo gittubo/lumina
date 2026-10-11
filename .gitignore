@@ -44,3 +44,6 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
+# Walkthrough video masters/web copies (too large for git; HQ versions are committed)
+walkthroughs/*_Walkthrough.mp4
+walkthroughs/*_web.mp4
