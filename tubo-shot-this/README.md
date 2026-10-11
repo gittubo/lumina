@@ -6,15 +6,18 @@ pushes into the glass and the brand name resolves on the lens. After that, the
 story continues through six chapters: The Eye, Stills, Motion, Process,
 Services and Contact.
 
-## Run locally
+## Run locally (VS Code)
 
-There is no build step. Serve the folder over HTTP, because opening the file
-directly with `file://` won't load the frames:
+There is no build step and nothing to install.
 
-```bash
-cd tubo-shot-this
-python3 -m http.server 8080   # then open http://localhost:8080
-```
+1. In VS Code, open the `tubo-shot-this` folder (File → Open Folder).
+2. Install the **Live Server** extension (by Ritwick Dey).
+3. Right-click `index.html` and choose **Open with Live Server**. The site
+   opens at `http://127.0.0.1:5500` and reloads each time you save a file.
+
+You can also double-click `index.html` to open it straight in a browser. Or
+serve the folder from VS Code's terminal with `python3 -m http.server 8080`
+and open http://localhost:8080.
 
 You can deploy it to any static host (Netlify, Vercel, GitHub Pages, S3) by
 uploading this folder as is.
