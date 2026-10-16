@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lumina — A Case Study</title>
+  <meta name="description" content="Lumina: a multimodal AI creative platform for images, video, 3D models and voice. Portfolio case study." />
+  <meta name="theme-color" content="#07070a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <script type="module" src="https://thrine.app/embed/v1.js"></script>
+  <style>
+    :root {
+      --ink: #07070a;
+      --ink-2: #0e0e13;
+      --paper: #ece6da;
+      --muted: #8d877c;
+      --line: rgba(236, 230, 218, 0.12);
+      --amber: #e3a857;
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --gutter: clamp(16px, 5vw, 72px);
+      --bar: clamp(28px, 7vh, 72px);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--paper);
+      font: 400 17px/1.65 var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    ::selection { background: var(--amber); color: var(--ink); }
+
+    /* Film grain + vignette overlay */
+    .grain {
+      position: fixed; inset: -50%; z-index: 100; pointer-events: none; opacity: .07;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grain 0.8s steps(4) infinite;
+    }
+    @keyframes grain {
+      0% { transform: translate(0, 0); } 25% { transform: translate(-3%, 2%); }
+      50% { transform: translate(2%, -3%); } 75% { transform: translate(-2%, -1%); }
+      100% { transform: translate(0, 0); }
+    }
+    .vignette {
+      position: fixed; inset: 0; z-index: 99; pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px var(--gutter);
+      font: 400 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+      mix-blend-mode: difference;
+    }
+    .nav a { text-decoration: none; }
+    .nav ul { display: flex; gap: clamp(14px, 3vw, 36px); list-style: none; margin: 0; padding: 0; }
+    @media (max-width: 560px) { .nav ul li:not(:last-child) { display: none; } }
+
+    /* Opening: letterboxed hero */
+    .opening {
+      position: relative; height: 100vh; height: 100svh; min-height: 560px;
+      display: grid; place-items: center; overflow: hidden;
+      background: radial-gradient(ellipse at 50% 60%, #1b1712 0%, var(--ink) 70%);
+    }
+    .opening::before, .opening::after {
+      content: ""; position: absolute; left: 0; right: 0; height: var(--bar);
+      background: #000; z-index: 3; transition: height 1.8s cubic-bezier(.7,0,.2,1);
+    }
+    .opening::before { top: 0; }
+    .opening::after { bottom: 0; }
+    body:not(.ready) .opening::before, body:not(.ready) .opening::after { height: 50.5%; }
+
+    .stage {
+      position: absolute; inset: 0; z-index: 1;
+      display: grid; place-items: center;
+      transform: scale(var(--zoom, 1)); transform-origin: center;
+    }
+    .stage-frame {
+      position: relative; width: min(100%, calc((100svh - 2 * var(--bar)) * 1177 / 692));
+    }
+    .stage-frame::before {
+      /* Fallback backdrop visible if the 3D embed fails to load */
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 50% 55%, rgba(227,168,87,.22), transparent 45%),
+        radial-gradient(circle at 50% 55%, rgba(236,230,218,.06) 0 1px, transparent 1px) 0 0 / 22px 22px;
+    }
+    model-embed { position: relative; }
+
+    .title-card {
+      position: relative; z-index: 2; text-align: center; pointer-events: none;
+      padding: 0 var(--gutter);
+      text-shadow: 0 2px 40px rgba(0,0,0,.6);
+    }
+    .eyebrow {
+      font: 400 12px/1 var(--mono); letter-spacing: .3em; text-transform: uppercase; color: var(--amber);
+    }
+    .title-card h1 {
+      font: 300 clamp(64px, 16vw, 220px)/.9 var(--serif);
+      letter-spacing: -.03em; margin: 18px 0 14px;
+    }
+    .title-card h1 em { font-style: italic; color: var(--amber); }
+    .title-card p { margin: 0 auto; max-width: 34ch; color: #cfc8ba; font-size: clamp(15px, 1.6vw, 19px); }
+    .title-card .reveal { transition-delay: calc(1.2s + var(--d, 0s)); }
+
+    .scroll-cue {
+      position: absolute; z-index: 4; left: 50%; bottom: calc(var(--bar) / 2); transform: translate(-50%, 50%);
+      font: 400 11px/1 var(--mono); letter-spacing: .3em; color: var(--muted); text-transform: uppercase;
+    }
+    .hint {
+      position: absolute; z-index: 4; right: var(--gutter); bottom: calc(var(--bar) / 2); transform: translateY(50%);
+      font: 400 11px/1 var(--mono); letter-spacing: .2em; color: var(--muted); text-transform: uppercase;
+    }
+    @media (max-width: 560px) { .hint { display: none; } }
+
+    /* Reveal-on-scroll */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1.2s ease, transform 1.2s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+    .in .reveal, .reveal.in { opacity: 1; transform: none; }
+
+    /* Chapters */
+    section.chapter { padding: clamp(96px, 16vh, 180px) var(--gutter); border-top: 1px solid var(--line); }
+    .chapter-head { display: grid; grid-template-columns: minmax(120px, 1fr) 3fr; gap: 24px; margin-bottom: clamp(48px, 8vh, 96px); }
+    @media (max-width: 760px) { .chapter-head { grid-template-columns: 1fr; } }
+    .chapter-num { font: 400 12px/1.6 var(--mono); letter-spacing: .2em; color: var(--amber); text-transform: uppercase; }
+    h2 { font: 300 clamp(40px, 7vw, 104px)/1 var(--serif); letter-spacing: -.02em; margin: 0; }
+    h2 em { font-style: italic; color: var(--amber); }
+    .lede { font: 300 clamp(22px, 2.6vw, 34px)/1.35 var(--serif); max-width: 30ch; margin: 0; color: #ddd6c8; }
+
+    .split { display: grid; grid-template-columns: minmax(120px, 1fr) 3fr; gap: 24px; }
+    @media (max-width: 760px) { .split { grid-template-columns: 1fr; } .split > :first-child { display: none; } }
+    .body-copy { max-width: 62ch; color: #bdb6a9; }
+    .body-copy p { margin: 0 0 1.2em; }
+
+    /* Shots: the four modalities */
+    .shots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: clamp(48px, 8vh, 96px); }
+    @media (max-width: 960px) { .shots { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .shots { grid-template-columns: 1fr; } }
+    .shot { background: var(--ink); padding: 32px 26px 36px; min-height: 280px; display: flex; flex-direction: column; justify-content: space-between; transition: background .5s; }
+    .shot:hover { background: var(--ink-2); }
+    .shot .tc { font: 400 11px/1 var(--mono); color: var(--muted); letter-spacing: .14em; }
+    .shot h3 { font: 300 34px/1.05 var(--serif); margin: 48px 0 12px; }
+    .shot p { margin: 0; font-size: 15px; color: #a9a295; }
+    .shot .via { margin-top: 18px; font: 400 11px/1 var(--mono); color: var(--amber); letter-spacing: .14em; text-transform: uppercase; }
+
+    /* Pipeline — a strip of film frames */
+    .reel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; counter-reset: frame; }
+    @media (max-width: 860px) { .reel { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .reel { grid-template-columns: 1fr; } }
+    .frame {
+      position: relative; padding: 42px 22px 26px; border: 1px solid var(--line); border-radius: 4px;
+      background: linear-gradient(180deg, rgba(227,168,87,.05), transparent 60%);
+    }
+    .frame::before {
+      counter-increment: frame; content: "0" counter(frame);
+      position: absolute; top: 14px; left: 22px; font: 400 11px/1 var(--mono); color: var(--amber); letter-spacing: .14em;
+    }
+    .frame h4 { font: 500 16px/1.3 var(--sans); margin: 0 0 8px; }
+    .frame p { margin: 0; font-size: 14.5px; color: #a9a295; }
+
+    /* Credits */
+    .credits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px 24px; text-align: center; margin: 0; }
+    @media (max-width: 760px) { .credits { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 440px) { .credits { grid-template-columns: 1fr; } }
+    .credits dt { font: 400 11px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .credits dd { margin: 0; font: 300 22px/1.4 var(--serif); }
+
+    /* Finale */
+    .finale { text-align: center; padding: clamp(120px, 22vh, 240px) var(--gutter); border-top: 1px solid var(--line); }
+    .finale h2 { font-size: clamp(48px, 10vw, 150px); margin-top: 18px; }
+    .finale .links { margin-top: 48px; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+    .btn {
+      display: inline-block; padding: 14px 26px; border: 1px solid var(--line); border-radius: 999px;
+      font: 400 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; text-decoration: none;
+      transition: background .3s, color .3s, border-color .3s;
+    }
+    .btn:hover, .btn:focus-visible { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+    .btn.primary { background: var(--amber); border-color: var(--amber); color: var(--ink); }
+    .btn.primary:hover { background: var(--paper); border-color: var(--paper); }
+
+    footer {
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      padding: 28px var(--gutter); border-top: 1px solid var(--line);
+      font: 400 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .grain { animation: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .opening::before, .opening::after { transition: none; }
+      body:not(.ready) .opening::before, body:not(.ready) .opening::after { height: var(--bar); }
+      .stage { transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- EDIT: replace "Your Name", the email and the links below with your own. -->
+  <nav class="nav" aria-label="Primary">
+    <a href="#top">Your Name</a>
+    <ul>
+      <li><a href="#premise">Premise</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#credits">Credits</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="opening" id="top">
+    <div class="stage" id="stage">
+      <div class="stage-frame">
+        <model-embed
+          project="e_5b38c7f6634b687a3911"
+          style="display:block;width:100%;aspect-ratio:1177/692"
+        ></model-embed>
+      </div>
+    </div>
+
+    <div class="title-card">
+      <div class="eyebrow reveal" style="--d:0s">A case study · 2026</div>
+      <h1 class="reveal" style="--d:.15s">Lum<em>i</em>na</h1>
+      <p class="reveal" style="--d:.3s">One workspace that turns a sentence into an image, a film, a sculpture and a voice.</p>
+    </div>
+
+    <span class="hint">Drag to orbit</span>
+    <span class="scroll-cue">Scroll</span>
+  </header>
+
+  <main>
+    <section class="chapter" id="premise">
+      <div class="chapter-head">
+        <div class="chapter-num reveal">Chapter I<br />Premise</div>
+        <h2 class="reveal" style="--d:.1s">Four mediums.<br /><em>One prompt.</em></h2>
+      </div>
+      <div class="split">
+        <span></span>
+        <div>
+          <p class="lede reveal">Creative AI tools live in separate tabs, separate bills and separate file formats. Lumina gathers them into a single project, so an idea can move from still to motion to object to sound without leaving the room.</p>
+          <div class="shots">
+            <article class="shot reveal" style="--d:0s">
+              <span class="tc">00:00:01:00</span>
+              <div><h3>Image</h3><p>Text-to-image with Stable Diffusion XL.</p><div class="via">via Stability AI</div></div>
+            </article>
+            <article class="shot reveal" style="--d:.1s">
+              <span class="tc">00:00:02:00</span>
+              <div><h3>Video</h3><p>Text-to-video generation for short cinematic clips.</p><div class="via">via Runway</div></div>
+            </article>
+            <article class="shot reveal" style="--d:.2s">
+              <span class="tc">00:00:03:00</span>
+              <div><h3>3D model</h3><p>Preview, then textured refine, shown in a Three.js viewer.</p><div class="via">via Meshy</div></div>
+            </article>
+            <article class="shot reveal" style="--d:.3s">
+              <span class="tc">00:00:04:00</span>
+              <div><h3>Voice</h3><p>Text-to-speech and voice synthesis.</p><div class="via">via Eleven Labs</div></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="pipeline">
+      <div class="chapter-head">
+        <div class="chapter-num reveal">Chapter II<br />Pipeline</div>
+        <h2 class="reveal" style="--d:.1s">Behind the <em>scenes</em></h2>
+      </div>
+      <div class="split">
+        <span></span>
+        <div>
+          <div class="body-copy reveal">
+            <p>Generations are slow and the providers are unreliable, so nothing runs inside a web request. Every generation is a job that survives a server restart.</p>
+          </div>
+          <div class="reel" style="margin-top:48px">
+            <div class="frame reveal" style="--d:0s"><h4>Validate</h4><p>The API route checks the request and confirms the user owns the project.</p></div>
+            <div class="frame reveal" style="--d:.1s"><h4>Enqueue</h4><p>A service writes a pending generation row and queues a job in Redis via Bull.</p></div>
+            <div class="frame reveal" style="--d:.2s"><h4>Render</h4><p>A worker calls the provider, retrying automatically, and stores the result.</p></div>
+            <div class="frame reveal" style="--d:.3s"><h4>Deliver</h4><p>The frontend polls until the generation completes, then shows the asset.</p></div>
+          </div>
+          <div class="body-copy reveal" style="margin-top:48px">
+            <p>Per-user hourly rate limits, a daily generation cap and Joi validation protect the API bills from runaway usage.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="credits">
+      <div class="chapter-head">
+        <div class="chapter-num reveal">Chapter III<br />Credits</div>
+        <h2 class="reveal" style="--d:.1s">The <em>cast</em></h2>
+      </div>
+      <dl class="credits">
+        <div class="reveal"><dt>Frontend</dt><dd>Next.js 14 · React 18<br />TypeScript · Tailwind</dd></div>
+        <div class="reveal" style="--d:.1s"><dt>3D</dt><dd>Three.js<br />GLTFLoader · OrbitControls</dd></div>
+        <div class="reveal" style="--d:.2s"><dt>State</dt><dd>Zustand<br />Axios</dd></div>
+        <div class="reveal"><dt>Backend</dt><dd>Node.js · Express<br />TypeScript</dd></div>
+        <div class="reveal" style="--d:.1s"><dt>Data</dt><dd>PostgreSQL · Prisma<br />Redis · Bull</dd></div>
+        <div class="reveal" style="--d:.2s"><dt>Ops</dt><dd>Docker Compose<br />GitHub Actions CI</dd></div>
+      </dl>
+    </section>
+
+    <section class="finale" id="contact">
+      <div class="eyebrow reveal">Fin</div>
+      <h2 class="reveal" style="--d:.1s">Let’s make<br /><em>something.</em></h2>
+      <div class="links reveal" style="--d:.2s">
+        <a class="btn primary" href="mailto:you@example.com">Get in touch</a>
+        <a class="btn" href="https://github.com/gittubo/lumina">View the code</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Your Name</span>
+    <span>Lumina · AI creative platform</span>
+  </footer>
+
+  <script>
+    (function () {
+      var body = document.body;
+      requestAnimationFrame(function () { body.classList.add('ready'); });
+      document.querySelector('.title-card').classList.add('in');
+
+      var items = document.querySelectorAll('main .reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+        items.forEach(function (el) { io.observe(el); });
+      } else {
+        items.forEach(function (el) { el.classList.add('in'); });
+      }
+
+      // Slow push-in on the hero as the visitor scrolls away
+      var stage = document.getElementById('stage');
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var ticking = false;
+        window.addEventListener('scroll', function () {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(function () {
+            var p = Math.min(window.scrollY / window.innerHeight, 1);
+            stage.style.setProperty('--zoom', (1 + p * 0.12).toFixed(3));
+            stage.style.opacity = (1 - p * 0.7).toFixed(3);
+            ticking = false;
+          });
+        }, { passive: true });
+      }
+    })();
+  </script>
+</body>
+</html>
